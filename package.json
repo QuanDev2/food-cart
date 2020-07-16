@@ -1,0 +1,25 @@
+{
+  "name": "food-cart",
+  "version": "1.0.0",
+  "description": "## an online solution for connecting authentic homecook chefs and food enthusast",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuanDev2/food-cart.git"
+  },
+  "author": "Quan Nguyen, Kristin Schaefer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/QuanDev2/food-cart/issues"
+  },
+  "homepage": "https://github.com/QuanDev2/food-cart#readme",
+  "dependencies": {
+    "axios": "^0.18.1",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.1.0",
+    "handlebars": "^4.7.6"
+  }
+}
