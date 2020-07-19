@@ -93,7 +93,7 @@ hr {
   border-top: solid 1px #555;
 }
 
-/* Log In Page */
+/* Sign Up Page */
 .form-container {
   width: 50%;
   margin: 5rem auto;
@@ -102,6 +102,11 @@ hr {
 }
 .submit-btn {
   display: block;
+}
+
+.ui.radio.checkbox.user-type-btn {
+  display: block;
+  margin: 1rem 0;
 }
 
 /* manage posts */
