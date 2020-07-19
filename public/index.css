@@ -3,8 +3,7 @@ nav {
   position: sticky;
   top: 0px;
 }
-
-.nav-btn-signup {
+.nav-sell-btn {
   margin-left: auto;
 }
 
@@ -84,4 +83,15 @@ nav {
 hr {
   border: 0;
   border-top: solid 1px #555;
+}
+
+/* Log In Page */
+.form-container {
+  width: 50%;
+  margin: 5rem auto;
+  border: 1px solid #ccc;
+  padding: 2rem;
+}
+.submit-btn {
+  display: block;
 }

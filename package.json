@@ -2,9 +2,12 @@
   "name": "food-cart",
   "version": "1.0.0",
   "description": "## an online solution for connecting authentic homecook chefs and food enthusast",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "build": "handlebars views/partials/dish.handlebars -f public/dishTemplate.js",
+    "prestart": "npm run build"
   },
   "repository": {
     "type": "git",
