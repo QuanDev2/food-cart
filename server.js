@@ -24,6 +24,8 @@ app.use(express.static(path.join(__dirname, 'public/src/img')));
 app.get('/', (req, res) => {
   res.render('homepage', {
     dishes: allDishData
+    // orderItem
+    // orderItemExists: false
   });
 });
 

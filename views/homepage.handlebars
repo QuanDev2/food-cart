@@ -6,5 +6,14 @@
     {{> dish}}
     {{/each}}
   </div>
-  {{!-- {{>order}} --}}
+  <div class="order-container">
+    <h3>My Order</h3>
+    <hr />
+    <div class="ui items order-items">
+      {{#if orderItemExists}}
+      {{>orderItem}}
+      {{/if}}
+    </div>
+    <button class="ui button blue place-order-btn">Place Order</button>
+  </div>
 </main>
