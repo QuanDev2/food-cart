@@ -3,8 +3,11 @@ nav {
   position: sticky;
   top: 0px;
 }
-.nav-sell-btn {
+.manage-post-btn {
   margin-left: auto;
+}
+.nav-sell-btn {
+  /* margin-left: auto; */
 }
 
 .nav-container {
@@ -79,6 +82,11 @@ nav {
   font-size: 1.3rem;
 }
 
+.notes {
+  line-height: 1.7rem;
+  margin-top: 1.5rem;
+}
+
 /* Utilities */
 hr {
   border: 0;
@@ -94,4 +102,21 @@ hr {
 }
 .submit-btn {
   display: block;
+}
+
+/* manage posts */
+.post-container {
+  max-width: 50%;
+  margin: 2rem auto;
+}
+
+table.post-table {
+  /* table-layout: fixed; */
+}
+.price-input {
+  width: 50px;
+}
+
+.quantity-input {
+  width: 50px;
 }

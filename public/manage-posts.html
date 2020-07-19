@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+    />
+    <link rel="stylesheet" href="./index.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script src="index.js"></script>
+    <title>Food Cart</title>
+  </head>
+  <body>
+    <nav class="ui menu nav-container">
+      <a href="index.html" class="header item">Browse Dishes</a>
+      <a href="#" class="item">About Us</a>
+      <div class="item">
+        <div class="ui icon input">
+          <input type="text" placeholder="Search for dishes" />
+          <i class="search icon"></i>
+        </div>
+      </div>
+
+      <a href="manage-posts.html" class="item manage-post-btn">
+        <button class="positive ui button">Manage posts</button>
+      </a>
+      <a href="sell-dish.html" class="item nav-sell-btn">
+        <button class="positive ui button">Sell your dish</button>
+      </a>
+      <a href="./sign-up.html" class="item nav-btn-signup">
+        <div class="ui primary button">Sign Up</div>
+      </a>
+      <a href="#" class="item"> <div class="ui button">Log In</div></a>
+    </nav>
+
+    <div class="form-container">
+      <h2>Manage your posts</h2>
+      <div class="ui selection dropdown">
+        <i class="dropdown icon"></i>
+        <div class="text">Select Seller Account</div>
+        <div class="menu">
+          <div class="item">Chef Kristin</div>
+          <div class="item">Mr. Q</div>
+          <div class="item">Chef Ramsey</div>
+          <div class="item">Akon</div>
+          <div class="item">Bkon</div>
+          <div class="item">Ckon</div>
+        </div>
+      </div>
+      <table class="ui blue table post-table">
+        <colgroup>
+          <col style="width: 100px;" />
+          <col style="width: 200px;" />
+          <col style="width: 100px;" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Dish</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Pho</td>
+            <td>
+              <div class="ui right labeled input price-input">
+                <label for="amount" class="ui label">$</label>
+                <input type="text" placeholder="10" id="amount" />
+                <div class="ui basic label">.00</div>
+              </div>
+            </td>
+            <td>
+              <div class="ui input focus">
+                <input class="quantity-input" type="text" placeholder="5" />
+              </div>
+            </td>
+            <td><div class="ui positive button update-btn">Update</div></td>
+            <td><div class="ui negative button delete-btn">Delete</div></td>
+          </tr>
+          <tr>
+            <td>Egg rolls</td>
+            <td>
+              <div class="ui right labeled input price-input">
+                <label for="amount" class="ui label">$</label>
+                <input type="text" placeholder="10" id="amount" />
+                <div class="ui basic label">.00</div>
+              </div>
+            </td>
+            <td>
+              <div class="ui input focus">
+                <input class="quantity-input" type="text" placeholder="20" />
+              </div>
+            </td>
+            <td><div class="ui positive button update-btn">Update</div></td>
+            <td><div class="ui negative button delete-btn">Delete</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
