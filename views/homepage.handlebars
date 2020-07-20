@@ -9,11 +9,18 @@
   <div class="order-container">
     <h3>My Order</h3>
     <hr />
+    {{!-- {{#if orderItemExists}} --}}
     <div class="ui items order-items">
-      {{#if orderItemExists}}
+      {{#each orderItems}}
       {{>orderItem}}
-      {{/if}}
+      {{/each}}
     </div>
+    <hr />
+    <h3>Order Total: ${{total}}</h3>
+    {{!-- <div class="total-container"> --}}
+    {{!-- {{/if}} --}}
+    {{!-- </div> --}}
     <button class="ui button blue place-order-btn">Place Order</button>
+
   </div>
 </main>

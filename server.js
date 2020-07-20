@@ -5,7 +5,7 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 var allDishData = require('./dishData');
-
+var orderList = [];
 // set up handlebars and view engine
 app.engine(
   'handlebars',
@@ -20,12 +20,22 @@ app.set('view engine', 'handlebars');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public/src/img')));
 
+app.get('/add-to-cart', (req, res) => {
+  orderList.push(req.query);
+  console.log(orderList);
+  res.render('homepage', {
+    orderItems: orderList,
+    dishes: allDishData,
+    // orderItemExists: true,
+    total: '20'
+  });
+});
 // serve the landing page route
 app.get('/', (req, res) => {
   res.render('homepage', {
-    dishes: allDishData
-    // orderItem
-    // orderItemExists: false
+    dishes: allDishData,
+    orderItems: orderList,
+    total: '40'
   });
 });
 
