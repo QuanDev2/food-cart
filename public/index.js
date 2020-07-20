@@ -6,11 +6,12 @@ $(document).ready(function () {
 // get info of all posts
 let numPosts = document.getElementsByClassName('dish').length;
 
-function insertOrderItem(dishName, price, quantity) {
+function insertOrderItem(dishName, price, quantity, imgUrl) {
   var orderItemContext = {
     dishName: dishName,
     price: price,
-    quantity: quantity
+    quantity: quantity,
+    imgUrl: imgUrl
   };
   var orderItemHTML = Handlebars.templates.orderItem(orderItemContext);
   var orderContainer = document.querySelector('.order-items');
@@ -36,34 +37,35 @@ window.addEventListener('DOMContentLoaded', function () {
       let dishElement = event.target.parentNode.parentNode;
       let dishName = dishElement.getElementsByClassName('dish-name')[0]
         .textContent;
-      let dishPrice = dishElement.getElementsByClassName('dish-price')[0]
-        .textContent;
+      let dishPrice = parseFloat(
+        dishElement
+          .getElementsByClassName('dish-price')[0]
+          .textContent.substr(1)
+      );
       let imgUrl = dishElement.getElementsByTagName('img')[0].src;
-      let qty = dishElement
-        .getElementsByClassName('qty-dropdown')[0]
-        .getElementsByClassName('text')[0].textContent;
-      let cartObject = {
-        dishName: dishName,
-        price: dishPrice,
-        quantity: qty,
-        imgUrl: imgUrl
-      };
-      axios
-        .get('/add-to-cart', {
-          params: {
-            dishName: dishName,
-            price: dishPrice,
-            quantity: qty,
-            imgUrl: imgUrl
-          }
-        })
-        .then(res => {
-          location.reload();
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      let qty = parseFloat(
+        dishElement
+          .getElementsByClassName('qty-dropdown')[0]
+          .getElementsByClassName('text')[0].textContent
+      );
+      let lineTotal = dishPrice * qty;
+      insertOrderItem(dishName, lineTotal, qty, imgUrl);
+      // axios
+      //   .get('/add-to-cart', {
+      //     params: {
+      //       dishName: dishName,
+      //       price: dishPrice,
+      //       quantity: qty,
+      //       imgUrl: imgUrl
+      //     }
+      //   })
+      //   .then(res => {
+      //     location.reload();
+      //     console.log(res);
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
     });
   }
 });

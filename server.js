@@ -24,18 +24,16 @@ app.get('/add-to-cart', (req, res) => {
   orderList.push(req.query);
   console.log(orderList);
   res.render('homepage', {
-    orderItems: orderList,
-    dishes: allDishData,
+    // orderItems: orderList,
+    dishes: allDishData
     // orderItemExists: true,
-    total: '20'
   });
 });
 // serve the landing page route
 app.get('/', (req, res) => {
   res.render('homepage', {
-    dishes: allDishData,
-    orderItems: orderList,
-    total: '40'
+    dishes: allDishData
+    // orderItems: orderList,
   });
 });
 

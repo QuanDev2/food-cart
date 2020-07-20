@@ -11,12 +11,12 @@
     <hr />
     {{!-- {{#if orderItemExists}} --}}
     <div class="ui items order-items">
-      {{#each orderItems}}
+      {{!-- {{#each orderItems}}
       {{>orderItem}}
-      {{/each}}
+      {{/each}} --}}
     </div>
     <hr />
-    <h3>Order Total: ${{total}}</h3>
+    <h3 id="order-total">Order Total: <span id="total"></span></h3>
     {{!-- <div class="total-container"> --}}
     {{!-- {{/if}} --}}
     {{!-- </div> --}}
