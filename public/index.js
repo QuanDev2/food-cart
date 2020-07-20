@@ -18,12 +18,21 @@ function insertOrderItem(dishName, price, quantity, imgUrl) {
   orderContainer.insertAdjacentHTML('beforeend', orderItemHTML);
 }
 
+function updateTotal(total) {
+  // remove total before inserting
+
+  // insert new total
+  totalHtml = document.getElementById('total');
+  totalHtml.innerHTML = total;
+}
+
 function addToCart() {
   insertOrderItem('Pho', '12', '1');
 }
 
 // Event listeners
 window.addEventListener('DOMContentLoaded', function () {
+  var total = 0.0;
   var orderList = [];
   // test adding item to order
   var loginBtn = document.getElementById('login-btn');
@@ -49,7 +58,9 @@ window.addEventListener('DOMContentLoaded', function () {
           .getElementsByClassName('text')[0].textContent
       );
       let lineTotal = dishPrice * qty;
+      total += lineTotal;
       insertOrderItem(dishName, lineTotal, qty, imgUrl);
+      updateTotal(total);
       // axios
       //   .get('/add-to-cart', {
       //     params: {
