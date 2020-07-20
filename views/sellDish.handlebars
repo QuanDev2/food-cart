@@ -1,0 +1,53 @@
+<div class="form-container">
+  <h2>Sell your dish</h2>
+  <form class="ui form">
+    <div class="ui selection dropdown" tabindex="0">
+      <i class="dropdown icon"></i>
+      <div class="text">Dish Name</div>
+      <div class="menu" tabindex="-1">
+        <div class="item">Bo Ne</div>
+        <div class="item">Broken Rice</div>
+        <div class="item">Egg Rolls</div>
+        <div class="item">Grilled Pork Vermicelli</div>
+        <div class="item">Pho</div>
+        <div class="item">Spring Rolls</div>
+      </div>
+    </div>
+    <div class="field price-container">
+      <label>Price</label>
+      <input type="text" name="dish-price" placeholder="$0.00" />
+    </div>
+    <div class="field qty-container">
+      <label>Quantity</label>
+      <input type="text" name="quantity" placeholder="0" />
+    </div>
+
+    {{!-- 
+
+    <div class="ui selection dropdown" tabindex="0">
+      <i class="dropdown icon"></i>
+      <div class="text">Quantity</div>
+      <div class="menu" tabindex="-1">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+      </div>
+    </div> --}}
+    <button class="ui button submit-btn blue" type="submit" style="display: block; margin-top: 1rem;">
+      Post My Dish
+    </button>
+  </form>
+  <div class="ui center aligned basic segment">
+    <div class="ui horizontal divider">
+      Can't find the dish you want to sell?
+    </div>
+    <a href="./create-dish.html">
+      <div class="ui teal labeled icon button">
+        Create new dish
+        <i class="add icon"></i>
+      </div>
+    </a>
+  </div>
+</div>

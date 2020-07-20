@@ -18,23 +18,28 @@ app.set('view engine', 'handlebars');
 // serve static files from public/
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/css')));
+app.use(express.static(path.join(__dirname, 'public/js')));
 app.use(express.static(path.join(__dirname, 'public/src/img')));
-
-app.get('/add-to-cart', (req, res) => {
-  orderList.push(req.query);
-  console.log(orderList);
-  res.render('homepage', {
-    // orderItems: orderList,
-    dishes: allDishData
-    // orderItemExists: true,
-  });
-});
 // serve the landing page route
 app.get('/', (req, res) => {
   res.render('homepage', {
     dishes: allDishData
     // orderItems: orderList,
   });
+});
+// app.get('/add-to-cart', (req, res) => {
+//   orderList.push(req.query);
+//   console.log(orderList);
+//   res.render('homepage', {
+//     // orderItems: orderList,
+//     dishes: allDishData
+//     // orderItemExists: true,
+//   });
+// });
+
+app.get('/sell-dish', (req, res) => {
+  res.render('sellDish');
 });
 
 app.listen(port, () => {
