@@ -29,19 +29,17 @@ function updateTotal(total) {
 function addToCart() {
   insertOrderItem('Pho', '12', '1');
 }
-
 // Event listeners
 window.addEventListener('DOMContentLoaded', function () {
   var total = 0.0;
   var orderList = [];
   // test adding item to order
   var loginBtn = document.getElementById('login-btn');
-  loginBtn.addEventListener('click', addToCart);
 
   // add event listener to every add-to-card button
+
   for (let i = 0; i < numPosts; i++) {
     cartBtn = document.getElementsByClassName('cart-btn')[i];
-
     cartBtn.addEventListener('click', event => {
       let dishElement = event.target.parentNode.parentNode;
       let dishName = dishElement.getElementsByClassName('dish-name')[0]
@@ -59,6 +57,7 @@ window.addEventListener('DOMContentLoaded', function () {
       );
       let lineTotal = dishPrice * qty;
       total += lineTotal;
+      console.log(total);
       insertOrderItem(dishName, lineTotal, qty, imgUrl);
       updateTotal(total);
       // axios

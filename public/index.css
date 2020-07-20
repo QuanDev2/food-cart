@@ -18,14 +18,16 @@ nav {
 .main-container {
   display: grid;
   grid-template-columns: 4fr 1fr;
+  /* grid-template-rows: minmax(200px, 1fr); */
   padding: 2rem 5rem;
+  gap: 1rem;
 }
 
 /* Dish grid */
 
 .dishes {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   grid-gap: 2rem 2rem;
   padding-right: 1rem;
 }
@@ -69,9 +71,8 @@ nav {
   height: 60px;
 }
 
-.order-container .total {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+.order-container {
+  /* margin-left: 1rem; */
 }
 
 .place-order-btn {
@@ -86,11 +87,15 @@ nav {
 .total {
   display: flex;
   justify-content: space-between;
-}
-
-.total {
   font-weight: 600;
   font-size: 1.3rem;
+  margin: 1.5rem 1rem;
+}
+
+.order {
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 1.5rem;
 }
 
 .notes {
