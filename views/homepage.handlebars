@@ -1,10 +1,56 @@
-{{> header}}
-
 <main class="main-container">
   <div class="dishes">
     {{#each dishes}}
     {{> dish}}
     {{/each}}
   </div>
-  {{!-- {{>order}} --}}
+  <div class="order-container">
+    <div class="order">
+      <h3>My Order</h3>
+      <hr />
+      {{!-- {{#if orderItemExists}} --}}
+      <div class="ui items order-items">
+        {{!-- {{#each orderItems}}
+        {{>orderItem}}
+        {{/each}} --}}
+      </div>
+      <hr />
+      <h3 id="order-total">Order Total: $<span id="total">0</span></h3>
+      {{!-- <div class="total-container"> --}}
+      {{!-- {{/if}} --}}
+      {{!-- </div> --}}
+      <button class="ui button blue place-order-btn">Place Order</button>
+    </div>
+
+  </div>
+  <div class="notes">
+    <h3>How to navigate our website</h3>
+    <ul>
+      <li>
+        This is the home page, where customers will browse for the dish
+        the want, then add the quantity and "add to cart" using the button below the photos.
+      </li>
+      <li>
+        After that, customer can click "Place Order" to make the purchase.
+        This will add new entries to the "Order" table in the database
+      </li>
+      <li>
+        To perform INSERT into the "Post" table, use the "Sell your dish"
+        button
+      </li>
+      <li>
+        To perform INSERT into the "Dish" table, inside the "Sell your
+        dish" page, click on "Create a new dish"
+      </li>
+      <li>
+        To perform INSERT into the "Customer" or "Seller" table, use the
+        "Sign Up" button
+      </li>
+      <li>
+        To perform UPDATE and DELETE on the "Post" table, click on the
+        "Manage Posts" button. Only sellers can manage their posts.
+        Customers cannot modify their orders
+      </li>
+    </ul>
+  </div>
 </main>

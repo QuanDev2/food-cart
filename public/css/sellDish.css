@@ -1,0 +1,7 @@
+#sell-dish-container {
+  max-width: 500px;
+}
+
+#sell-dish-container .price-container {
+  margin-top: 1rem;
+}
