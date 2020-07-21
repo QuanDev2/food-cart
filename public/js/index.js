@@ -49,11 +49,17 @@ window.addEventListener('DOMContentLoaded', function () {
           .textContent.substr(1)
       );
       let imgUrl = dishElement.getElementsByTagName('img')[0].src;
+      // show error if user hasn't chosen quantity
+
       let qty = parseFloat(
         dishElement
           .getElementsByClassName('qty-dropdown')[0]
           .getElementsByClassName('text')[0].textContent
       );
+      if (isNaN(qty)) {
+        alert('Error: User has to pick quantity to Add to cart');
+        return;
+      }
       let lineTotal = dishPrice * qty;
       total += lineTotal;
       console.log(total);
