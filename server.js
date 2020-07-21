@@ -44,6 +44,10 @@ app.get('/manage-posts', (req, res) => {
   res.render('managePosts');
 });
 
+app.get('/admin-portal', (req, res) => {
+  res.render('adminPortal');
+});
+
 app.listen(port, () => {
   console.log('server is listening on port ', port);
 });
