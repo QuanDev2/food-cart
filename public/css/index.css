@@ -146,3 +146,10 @@ table.post-table {
 .quantity-input {
   width: 50px;
 }
+
+#admin-portal-container {
+  max-width: 60%;
+  margin: 2em auto;
+  padding: 2em;
+  border: 1px solid #ccc;
+}

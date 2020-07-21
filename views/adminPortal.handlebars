@@ -1,0 +1,84 @@
+<div id="admin-portal-container">
+    <div class="ui top attached tabular menu">
+        <a class="active item orders-btn">
+            Orders
+        </a>
+        <a class="item sellers-btn">
+            Sellers
+        </a>
+        <a class="item customers-btn">
+            Customers
+        </a>
+        <div class="right menu">
+            <div class="item">
+                <div class="ui transparent icon input">
+                    <input type="text" placeholder="Search users...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui bottom attached segment">
+        <table class="ui celled table"  id="orders-table">
+            <thead>
+            <tr><th>Order ID</th>
+                <th>Dish Name</th>
+                <th>Quantity</th>
+                <th>Customer Name</th>
+                <th>Total</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+                <td data-label="order-id">1</td>
+                <td data-label="dish-name">Broken Rice</td>
+                <td data-label="quantity">2</td>
+                <td data-label="customer-name">John Doe</td>
+                <td data-label="total">$15.00</td>
+            </tr>
+            <tr>
+                <td data-label="order-id">1</td>
+                <td data-label="dish-name">Pho</td>
+                <td data-label="quantity">4</td>
+                <td data-label="customer-name">John Doe</td>
+                <td data-label="total">$30.00</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="ui celled table" id="customers-table">
+            <thead>
+            <tr><th>Username</th>
+                <th>Name</th>
+                <th>Password</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+                <td data-label="username">John_Doe</td>
+                <td data-label="name">John Doe</td>
+                <td data-label=password">123456</td>
+                <td data-label="email">John_Doe@gmail.com</td>
+                <td data-label="phone-number">111-111-1111</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="ui celled table" id="sellers-table">
+            <thead>
+            <tr><th>Username</th>
+                <th>Name</th>
+                <th>Password</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+            </tr></thead>
+            <tbody>
+            <tr>
+                <td data-label="username">Natatlie_P</td>
+                <td data-label="name">Natalie Portmann</td>
+                <td data-label=password">654321</td>
+                <td data-label="email">np@gmail.com</td>
+                <td data-label="phone-number">333-111-1111</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
