@@ -3,6 +3,8 @@ $(document).ready(function () {
   $('.ui.dropdown').dropdown();
 });
 
+$('.ui.checkbox').checkbox();
+
 // get info of all posts
 let numPosts = document.getElementsByClassName('dish').length;
 
@@ -26,9 +28,6 @@ function updateTotal(total) {
   totalHtml.innerHTML = total;
 }
 
-function addToCart() {
-  insertOrderItem('Pho', '12', '1');
-}
 // Event listeners
 window.addEventListener('DOMContentLoaded', function () {
   var total = 0.0;
@@ -60,22 +59,6 @@ window.addEventListener('DOMContentLoaded', function () {
       console.log(total);
       insertOrderItem(dishName, lineTotal, qty, imgUrl);
       updateTotal(total);
-      // axios
-      //   .get('/add-to-cart', {
-      //     params: {
-      //       dishName: dishName,
-      //       price: dishPrice,
-      //       quantity: qty,
-      //       imgUrl: imgUrl
-      //     }
-      //   })
-      //   .then(res => {
-      //     location.reload();
-      //     console.log(res);
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
     });
   }
 });

@@ -1,0 +1,49 @@
+<div class="form-container" id="sign-up-form">
+  <h2>Create account</h2>
+  <form class="ui form">
+    <div class="field">
+      <label>Full name</label>
+      <input type="text" name="full-name" placeholder="Full Name" />
+    </div>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" name="user-name" placeholder="User Name" />
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="text" name="password" placeholder="Password" />
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="text" name="email" placeholder="Email" />
+    </div>
+    <div class="field">
+      <label>Phone Number</label>
+      <input type="text" name="phone-number" placeholder="Phone Number" />
+    </div>
+
+    <div class="ui radio checkbox user-type-btn">
+      <input type="radio" name="radio" checked="checked" />
+      <label>I am a seller</label>
+    </div>
+    <div class="ui radio checkbox user-type-btn">
+      <input type="radio" name="radio" />
+      <label>I am a customer</label>
+    </div>
+    <div class="field">
+      <div class="ui checkbox">
+        <input type="checkbox" tabindex="0" class="hidden" />
+        <label>I agree to the Terms and Conditions</label>
+      </div>
+    </div>
+    <button class="ui button submit-btn blue" type="submit" style="display: block; margin-top: 1rem;">
+      Submit
+    </button>
+  </form>
+</div>
+
+<style>
+  #sign-up-form {
+    max-width: 500px;
+  }
+</style>

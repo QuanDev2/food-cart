@@ -4,8 +4,7 @@ var exphbs = require('express-handlebars');
 var app = express();
 var port = process.env.PORT || 3000;
 
-var allDishData = require('./dishData');
-var orderList = [];
+var allDishData = require('./data/postData');
 // set up handlebars and view engine
 app.engine(
   'handlebars',
@@ -28,18 +27,21 @@ app.get('/', (req, res) => {
     // orderItems: orderList,
   });
 });
-// app.get('/add-to-cart', (req, res) => {
-//   orderList.push(req.query);
-//   console.log(orderList);
-//   res.render('homepage', {
-//     // orderItems: orderList,
-//     dishes: allDishData
-//     // orderItemExists: true,
-//   });
-// });
 
 app.get('/sell-dish', (req, res) => {
   res.render('sellDish');
+});
+
+app.get('/create-dish', (req, res) => {
+  res.render('createDish');
+});
+
+app.get('/sign-up', (req, res) => {
+  res.render('signUp');
+});
+
+app.get('/manage-posts', (req, res) => {
+  res.render('managePosts');
 });
 
 app.listen(port, () => {
