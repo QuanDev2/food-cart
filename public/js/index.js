@@ -5,7 +5,7 @@ $(document).ready(function () {
 
 $('.ui.checkbox').checkbox();
 
-$('.ui .item').on('click', function() {
+$('.ui .item').on('click', function () {
   $('.ui .item').removeClass('active');
   $(this).addClass('active');
 });
@@ -32,32 +32,29 @@ function updateTotal(total) {
   totalHtml = document.getElementById('total');
   totalHtml.innerHTML = total;
 }
-let ordersTable = document.getElementById('orders-table');
-let sellersTable = document.getElementById('sellers-table');
-let customersTable = document.getElementById('customers-table');
-function showOrders(){
-  ordersTable.style.display = 'block';
-  sellersTable.style.display = 'none';
-  customersTable.style.display = 'none';
-}
-function showSellers(){
-  sellersTable.style.display = 'block';
-  ordersTable.style.display = 'none';
-  customersTable.style.display = 'none';
-}
-function showCustomers(){
-  customersTable.style.display = 'block';
-  sellersTable.style.display = 'none';
-  ordersTable.style.display = 'none';
-}
+// let ordersTable = document.getElementById('orders-table');
+// let sellersTable = document.getElementById('sellers-table');
+// let customersTable = document.getElementById('customers-table');
+// function showOrders(){
+//   ordersTable.style.display = 'block';
+//   sellersTable.style.display = 'none';
+//   customersTable.style.display = 'none';
+// }
+// function showSellers(){
+//   sellersTable.style.display = 'block';
+//   ordersTable.style.display = 'none';
+//   customersTable.style.display = 'none';
+// }
+// function showCustomers(){
+//   customersTable.style.display = 'block';
+//   sellersTable.style.display = 'none';
+//   ordersTable.style.display = 'none';
+// }
 
 // Event listeners
 window.addEventListener('DOMContentLoaded', function () {
   var total = 0.0;
   var orderList = [];
-  // test adding item to order
-  var loginBtn = document.getElementById('login-btn');
-  showOrders();
 
   // add event listener to every add-to-card button
 
@@ -91,11 +88,10 @@ window.addEventListener('DOMContentLoaded', function () {
       updateTotal(total);
     });
   }
-  let ordersBtn = document.getElementsByClassName('orders-btn')[0];
-  ordersBtn.addEventListener('click', showOrders);
-  let sellersBtn = document.getElementsByClassName('sellers-btn')[0];
-  sellersBtn.addEventListener('click', showSellers);
-  let customersBtn = document.getElementsByClassName('customers-btn')[0];
-  customersBtn.addEventListener('click', showCustomers);
+  // let ordersBtn = document.getElementsByClassName('orders-btn')[0];
+  // ordersBtn.addEventListener('click', showOrders);
+  // let sellersBtn = document.getElementsByClassName('sellers-btn')[0];
+  // sellersBtn.addEventListener('click', showSellers);
+  // let customersBtn = document.getElementsByClassName('customers-btn')[0];
+  // customersBtn.addEventListener('click', showCustomers);
 });
-
