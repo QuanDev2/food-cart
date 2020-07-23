@@ -1,49 +1,55 @@
-<div class="form-container" id="sign-up-form">
+<div class="form-container" id="sign-up-form-container">
   <h2>Create account</h2>
-  <form class="ui form">
+  <form class="ui form" id="sign-up-form">
     <div class="field">
       <label>Full name</label>
-      <input type="text" name="full-name" placeholder="Full Name" />
+      <input type="text" name="fullName" placeholder="Full Name" id="full-name-input" />
     </div>
     <div class="field">
       <label>Username</label>
-      <input type="text" name="user-name" placeholder="User Name" />
+      <input type="text" name="username" placeholder="User Name" id="username-input" />
     </div>
     <div class="field">
       <label>Password</label>
-      <input type="text" name="password" placeholder="Password" />
+      <input type="text" name="password" placeholder="Password" id="password-input" />
     </div>
     <div class="field">
       <label>Email</label>
-      <input type="text" name="email" placeholder="Email" />
+      <input type="text" name="email" placeholder="Email" id="email-input" />
     </div>
     <div class="field">
       <label>Phone Number</label>
-      <input type="text" name="phone-number" placeholder="Phone Number" />
+      <input type="text" name="phoneNumber" placeholder="Phone Number" id="phone-input" />
     </div>
 
-    <div class="ui radio checkbox user-type-btn">
-      <input type="radio" name="radio" checked="checked" />
-      <label>I am a seller</label>
+    <div class="ui radio  user-type-btn">
+      <input type="radio" name="accountType" checked="checked" id="account-seller" value="seller" />
+      <label for="account-seller">I am a seller</label>
+      <br>
+      <input type="radio" name="accountType" id="account-customer" value="customer" />
+      <label for="account-customer">I am a customer</label>
     </div>
-    <div class="ui radio checkbox user-type-btn">
-      <input type="radio" name="radio" />
-      <label>I am a customer</label>
-    </div>
+
     <div class="field">
       <div class="ui checkbox">
         <input type="checkbox" tabindex="0" class="hidden" />
         <label>I agree to the Terms and Conditions</label>
       </div>
     </div>
-    <button class="ui button submit-btn blue" type="submit" style="display: block; margin-top: 1rem;">
+    <button class="ui button submit-btn blue" type="submit" style=" margin-top: 1rem;">
       Submit
     </button>
   </form>
-</div>
 
-<style>
-  #sign-up-form {
-    max-width: 500px;
-  }
-</style>
+  <div id="post-success">
+    <h3>
+      Your account was created!
+    </h3>
+  </div>
+  <div id="post-error">
+    <h3>
+      There's an error!
+    </h3>
+  </div>
+
+</div>

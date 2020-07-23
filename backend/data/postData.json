@@ -1,0 +1,20 @@
+[
+  {
+    "dishName": "Pho",
+    "seller": "Chef Kristin",
+    "price": "12",
+    "imgUrl": "/pho.jpg"
+  },
+  {
+    "dishName": "Broken rice",
+    "seller": "Mr. Q",
+    "price": "10",
+    "imgUrl": "/broken-rice.jpg"
+  },
+  {
+    "dishName": "spring rolls",
+    "seller": "Chef Kristin",
+    "price": "4",
+    "imgUrl": "/spring-rolls.jpg"
+  }
+]

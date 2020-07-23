@@ -115,19 +115,28 @@ hr {
 }
 
 /* Sign Up Page */
-.form-container {
-  width: 50%;
+#sign-up-form-container {
+  max-width: 500px;
   margin: 5em auto;
   border: 1px solid #ccc;
   padding: 2em;
 }
+
+#sign-up-form-container label {
+  margin-bottom: 0.5em;
+}
+
 .submit-btn {
   display: block;
 }
 
-.ui.radio.checkbox.user-type-btn {
-  display: block;
+.user-type-btn {
+  /* display: block; */
   margin: 1em 0;
+}
+
+.user-type-btn input {
+  margin: 0.5em 0;
 }
 
 /* manage posts */
