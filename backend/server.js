@@ -32,8 +32,22 @@ app.get('/', (req, res) => {
   });
 });
 
+app.post('/create-dish', (req, res) => {
+  console.log(req.body);
+  // check if dish already exists
+  let dishExists = true;
+  // if no, send OK
+  // if yes, send error 403
+  if (dishExists == false) {
+    res.send('OK');
+  } else {
+    res.send('Dish already exists');
+  }
+});
+
 app.post('/sign-up', (req, res) => {
   console.log(req.body);
+
   if (req.body.fullName !== '') {
     res.send('OK');
   } else {
@@ -41,18 +55,10 @@ app.post('/sign-up', (req, res) => {
   }
 });
 
-// testing db
-// app.get('/createdb', (req, res) => {
-//   let query =
-//     'CREATE TABLE client (id INT(11) AUTO_INCREMENT NOT NULL ,first_name VARCHAR(255) NOT NULL,	last_name VARCHAR(255) NOT NULL,	dob DATE NOT NULL,	PRIMARY KEY (id),	CONSTRAINT full_name UNIQUE (first_name, last_name));';
-//   let query2 = 'select * from client';
-//   mysql.pool.query(query2, (err, results, fields) => {
-//     if (err) throw err;
-//     // console.log(results);
-
-//     res.send('database created successfully!');
-//   });
-// });
+app.post('/create-post', (req, res) => {
+  console.log(req.body);
+  res.send('OK');
+});
 
 app.get('/sell-dish', (req, res) => {
   res.render('sellDish');
@@ -77,3 +83,16 @@ app.get('/admin-portal', (req, res) => {
 app.listen(port, () => {
   console.log('server is listening on port ', port);
 });
+
+// testing db
+// app.get('/createdb', (req, res) => {
+//   let query =
+//     'CREATE TABLE client (id INT(11) AUTO_INCREMENT NOT NULL ,first_name VARCHAR(255) NOT NULL,	last_name VARCHAR(255) NOT NULL,	dob DATE NOT NULL,	PRIMARY KEY (id),	CONSTRAINT full_name UNIQUE (first_name, last_name));';
+//   let query2 = 'select * from client';
+//   mysql.pool.query(query2, (err, results, fields) => {
+//     if (err) throw err;
+//     // console.log(results);
+
+//     res.send('database created successfully!');
+//   });
+// });

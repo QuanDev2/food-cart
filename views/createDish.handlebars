@@ -1,17 +1,36 @@
+<script type="module" src="/createDish.js" defer></script>
+
 <div class="form-container" id="create-dish-container">
   <h2>Create your dish</h2>
-  <form class="ui form">
+  <form class="ui form" id="create-dish-form">
     <div class="field">
       <label>Dish Name</label>
-      <input type="text" name="create-dish" placeholder="Dish Name" />
+      <input required type="text" name="create-dish" placeholder="Dish Name" id="dish-name" />
     </div>
-    <button class="ui button submit-btn blue" type="submit" style="display: block; margin-top: 1rem;">
+    <button id="submit-btn" class="ui button submit-btn blue" type="submit" style="display: block; margin-top: 1rem;">
       Create Dish
     </button>
+    <div id="post-success" class="post-result">
+      <h3>
+        Your dish was created!
+      </h3>
+      <h3>You can create another one or go back to start posting</h3>
+    </div>
+    <div id="post-error" class="post-result">
+      <h3>
+        Error: Dish already exists!
+      </h3>
+    </div>
   </form>
-  <style>
-    #create-dish-container {
-      width: 500px;
-    }
-  </style>
+
+
 </div>
+<style>
+  #create-dish-container {
+    width: 500px;
+  }
+
+  #create-dish-container label {
+    margin: 1em 0;
+  }
+</style>

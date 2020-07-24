@@ -1,3 +1,5 @@
+<script type="module" src="signUp.js" defer></script>
+
 <div class="form-container" id="sign-up-form-container">
   <h2>Create account</h2>
   <form class="ui form" id="sign-up-form">
@@ -7,7 +9,7 @@
     </div>
     <div class="field">
       <label>Username</label>
-      <input type="text" name="username" placeholder="User Name" id="username-input" />
+      <input required type="text" name="username" placeholder="User Name" id="username-input" />
     </div>
     <div class="field">
       <label>Password</label>
@@ -41,12 +43,13 @@
     </button>
   </form>
 
-  <div id="post-success">
+  <div id="post-success" class="post-result">
     <h3>
       Your account was created!
     </h3>
+    <h3>You can create another one or go to Admin Portal to manage accounts</h3>
   </div>
-  <div id="post-error">
+  <div id="post-error" class="post-result">
     <h3>
       There's an error!
     </h3>

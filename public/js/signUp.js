@@ -1,10 +1,9 @@
+import { hideAllResults, showSuccess, showError } from '/utilities.js';
+
 let signUpForm = document.getElementById('sign-up-form');
 let submitBtn = document.getElementsByClassName('submit-btn')[0];
-let postSuccess = document.getElementById('post-success');
-let postError = document.getElementById('post-error');
 
-postSuccess.style.display = 'none';
-postError.style.display = 'none';
+hideAllResults();
 
 const handleSubmit = async event => {
   event.preventDefault();
@@ -28,14 +27,12 @@ const handleSubmit = async event => {
     console.log(res);
     if (res.status === 200) {
       signUpForm.reset();
-      postSuccess.style.display = 'block';
-      postError.style.display = 'none';
+      showSuccess();
     } else {
     }
   } catch (err) {
-    postSuccess.style.display = 'none';
-    postError.style.display = 'block';
+    showError();
   }
 };
 
-submitBtn.addEventListener('click', handleSubmit);
+signUpForm.addEventListener('submit', handleSubmit);

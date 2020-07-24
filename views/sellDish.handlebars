@@ -1,7 +1,9 @@
+<script src="/sellDish.js" type="module"></script>
+
 <div class="form-container" id="sell-dish-container">
-  <h2>Sell your dish</h2>
-  <form class="ui form">
-    <div class="ui selection dropdown" tabindex="0">
+  <h2>Create your post</h2>
+  <form class="ui form" id="sell-dish-form">
+    <div id="dishMenu" class="ui selection dropdown" tabindex="0">
       <i class="dropdown icon"></i>
       <div class="text">Dish Name</div>
       <div class="menu" tabindex="-1">
@@ -13,28 +15,16 @@
         <div class="item">Spring Rolls</div>
       </div>
     </div>
-    <div class="field price-container">
+    <div class="field input-container">
       <label>Price</label>
-      <input type="text" name="dish-price" placeholder="$0.00" />
+      <input required id="price-input" type="text" name="dish-price" placeholder="10.00" />
     </div>
-    <div class="field qty-container">
+    <div class="field input-container">
       <label>Quantity</label>
-      <input type="text" name="quantity" placeholder="0" />
+      <input required id="qty-input" type="text" name="quantity" placeholder="1" />
     </div>
 
-    {{!-- 
 
-    <div class="ui selection dropdown" tabindex="0">
-      <i class="dropdown icon"></i>
-      <div class="text">Quantity</div>
-      <div class="menu" tabindex="-1">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-        <div class="item">4</div>
-        <div class="item">5</div>
-      </div>
-    </div> --}}
     <button class="ui button submit-btn blue" type="submit" style="display: block; margin-top: 1rem;">
       Post My Dish
     </button>
@@ -51,3 +41,7 @@
     </a>
   </div>
 </div>
+
+<style>
+
+</style>
