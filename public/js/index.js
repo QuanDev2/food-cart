@@ -10,6 +10,60 @@ $('.ui .item').on('click', function () {
   $(this).addClass('active');
 });
 
+const showSuccess = () => {
+  let resultDiv = document.getElementById('post-result');
+  resultDiv.innerHTML = '<h3>Your order was placed!</h3>';
+};
+
+const removeOrderItems = () => {
+  document.querySelectorAll('.order-items .item').forEach(elem => {
+    elem.remove();
+  });
+};
+
+const resetQuantity = () => {
+  document
+    .querySelectorAll('.ui.compact.selection.dropdown.qty-dropdown')
+    .forEach(elem => {
+      elem.children[1].textContent = 'Quantity';
+    });
+};
+
+const resetOrder = () => {
+  showSuccess();
+  removeOrderItems();
+  document.getElementById('total').textContent = '0';
+};
+
+placeOrderBtn = document.getElementById('place-order-btn');
+placeOrderBtn.addEventListener('click', async event => {
+  orderList = [];
+  // collect all order items
+  document.querySelectorAll('.order-items .item').forEach(elem => {
+    const content = elem.children[1].children;
+    const dishName = content[0].textContent;
+    const price = content[1].children[0].textContent.substring(1);
+    const qty = content[1].children[1].textContent.substring(5);
+    orderList.push({
+      dishName: dishName,
+      price: price,
+      quantity: qty
+    });
+  });
+  // send to the server
+  try {
+    const res = await axios.post('/new-order', {
+      orderList
+    });
+    // console.log(res);
+  } catch (err) {
+    throw err;
+  }
+  // show success
+
+  resetOrder();
+});
+
 // get info of all posts
 let numPosts = document.getElementsByClassName('dish').length;
 
@@ -25,6 +79,18 @@ function insertOrderItem(dishName, price, quantity, imgUrl) {
   orderContainer.insertAdjacentHTML('beforeend', orderItemHTML);
 }
 
+function insertPostItem(dishName, price, seller, imgUrl) {
+  var postItemContext = {
+    dishName: dishName,
+    price: price,
+    seller: seller,
+    imgUrl: imgUrl
+  };
+  var postItemHTML = Handlebars.templates.dish(postItemContext);
+  var postContainer = document.getElementById('dishes');
+  postContainer.insertAdjacentHTML('beforeend', postItemHTML);
+}
+
 function updateTotal(total) {
   // remove total before inserting
 
@@ -32,8 +98,113 @@ function updateTotal(total) {
   totalHtml = document.getElementById('total');
   totalHtml.innerHTML = total;
 }
+
+// Seach feature
+let allPosts = [];
+
+/*
+ * This function clears the current search term, causing all posts to be
+ * re-inserted into the DOM.
+ */
+function clearSearchAndReinsertPosts() {
+  document.getElementById('nav-search-input').value = '';
+  doSearchUpdate();
+}
+
+/*
+ * A function that determines whether a given post matches a search query.
+ * Returns true if the post matches the query and false otherwise.
+ */
+function postMatchesSearchQuery(post, searchQuery) {
+  /*
+   * An empty query matches all posts.
+   */
+  if (!searchQuery) {
+    return true;
+  }
+  /*
+   * The search query matches the post if either the post's text or the post's
+   * author contains the search query.
+   */
+  searchQuery = searchQuery.trim().toLowerCase();
+  return post.dishName.toLowerCase().indexOf(searchQuery) >= 0;
+}
+
+/*
+ * Perform a search over over all the posts based on the search query the user
+ * entered in the navbar.  Only display posts that match the search query.
+ * Display all posts if the search query is empty.
+ */
+function doSearchUpdate() {
+  /*
+   * Grab the search query from the navbar search box.
+   */
+  var searchQuery = document.getElementById('nav-search-input').value;
+
+  /*
+   * Remove all posts from the DOM temporarily.
+   */
+  var postContainer = document.getElementById('dishes');
+  if (postContainer) {
+    while (postContainer.lastChild) {
+      postContainer.removeChild(postContainer.lastChild);
+    }
+  }
+
+  /*
+   * Loop through the collection of all posts and add posts back into the DOM
+   * if they match the current search query.
+   */
+  allPosts.forEach(function (post) {
+    if (postMatchesSearchQuery(post, searchQuery)) {
+      insertPostItem(post.dishName, post.price, post.seller, post.imgUrl);
+    }
+  });
+}
+
+/*
+ * This function parses an existing DOM element representing a single post
+ * into an object representing that post and returns that object.  The object
+ * is structured like this:
+ *
+ * {
+ *   dishName: "...",
+ *   price: "..."
+ * }
+ */
+function parsePostElem(postElem) {
+  var post = {};
+
+  var dishNameElem = postElem.querySelector('.dish-name');
+  post.dishName = dishNameElem.textContent.trim();
+  var priceElem = postElem.querySelector('.dish-price');
+  post.price = priceElem.textContent.substring(1).trim();
+  var sellerElem = postElem.querySelector('.seller-name');
+  post.seller = sellerElem.textContent.trim();
+  var imgUrlElem = postElem.querySelector('img');
+  post.imgUrl = imgUrlElem.src;
+
+  return post;
+}
+
 // Event listeners
 window.addEventListener('DOMContentLoaded', function () {
+  // Remember all of the existing twits in an array that we can use for search.
+  var postElemsCollection = document.getElementsByClassName('dish');
+  for (var i = 0; i < postElemsCollection.length; i++) {
+    allPosts.push(parsePostElem(postElemsCollection[i]));
+  }
+
+  var searchButton = document.getElementById('nav-search-button');
+  if (searchButton) {
+    searchButton.addEventListener('click', doSearchUpdate);
+  }
+
+  var searchInput = document.getElementById('nav-search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', doSearchUpdate);
+  }
+
   var total = 0.0;
   var orderList = [];
 
@@ -64,8 +235,9 @@ window.addEventListener('DOMContentLoaded', function () {
       }
       let lineTotal = dishPrice * qty;
       total += lineTotal;
-      console.log(total);
+      // console.log(total);
       insertOrderItem(dishName, lineTotal, qty, imgUrl);
+      resetQuantity();
       updateTotal(total);
     });
   }
