@@ -178,7 +178,7 @@ function parsePostElem(postElem) {
   var dishNameElem = postElem.querySelector('.dish-name');
   post.dishName = dishNameElem.textContent.trim();
   var priceElem = postElem.querySelector('.dish-price');
-  post.price = priceElem.textContent.trim();
+  post.price = priceElem.textContent.substring(1).trim();
   var sellerElem = postElem.querySelector('.seller-name');
   post.seller = sellerElem.textContent.trim();
   var imgUrlElem = postElem.querySelector('img');
