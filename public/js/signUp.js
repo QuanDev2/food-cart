@@ -1,9 +1,10 @@
-import { hideAllResults, showSuccess, showError } from '/utilities.js';
-
 let signUpForm = document.getElementById('sign-up-form');
 let submitBtn = document.getElementsByClassName('submit-btn')[0];
 
-hideAllResults();
+const showSuccess = () => {
+  let resultDiv = document.getElementById('post-result');
+  resultDiv.innerHTML = '<h3>Your account was created!</h3>';
+};
 
 const handleSubmit = async event => {
   event.preventDefault();

@@ -1,19 +1,24 @@
-import { hideAllResults, showSuccess, showError } from '/utilities.js';
-
 function isNumeric(value) {
   return /^\d+$/.test(value);
 }
 
+const showSuccess = () => {
+  let resultDiv = document.getElementById('post-result');
+  resultDiv.innerHTML = '<h3>Your post was created!</h3>';
+};
+
 const priceElem = document.getElementById('price-input');
 const qtyElem = document.getElementById('qty-input');
 const form = document.getElementById('sell-dish-form');
-// hideAllResults();
+const nameElem = document.getElementById('dishMenu');
+
 priceElem.parentElement.removeAttribute('data-error');
 document.querySelectorAll('.field input').forEach(elem => {
   elem.addEventListener('input', () => {
     elem.parentElement.removeAttribute('data-error');
   });
 });
+
 form.addEventListener('submit', async event => {
   let hasError = false;
 
@@ -29,6 +34,10 @@ form.addEventListener('submit', async event => {
     qtyElem.parentElement.setAttribute('data-error', 'Invalid quantity');
     hasError = true;
   }
+  if (dishName == 'Dish Name') {
+    alert('Please choose a dish name');
+    hasError = true;
+  }
   if (hasError == true) return;
   try {
     const res = await axios.post('/create-post', {
@@ -36,6 +45,8 @@ form.addEventListener('submit', async event => {
       price: priceElem.value,
       quantity: qtyElem.value
     });
+    nameElem.children[1].textContent = 'Dish Name';
+    showSuccess();
   } catch (err) {
     throw err;
   }

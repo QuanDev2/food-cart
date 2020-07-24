@@ -32,10 +32,15 @@ app.get('/', (req, res) => {
   });
 });
 
+app.post('/new-order', (req, res) => {
+  console.log(req.body.orderList);
+  res.send('OK');
+});
+
 app.post('/create-dish', (req, res) => {
   console.log(req.body);
   // check if dish already exists
-  let dishExists = true;
+  let dishExists = false;
   // if no, send OK
   // if yes, send error 403
   if (dishExists == false) {

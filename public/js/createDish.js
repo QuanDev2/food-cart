@@ -1,9 +1,13 @@
-import { hideAllResults, showSuccess, showError } from '/utilities.js';
+// import { hideAllResults, showSuccess, showError } from '/utilities.js';
 
 const btn = document.getElementById('submit-btn');
 const form = document.getElementById('create-dish-form');
 
-hideAllResults();
+const showSuccess = () => {
+  let resultDiv = document.getElementById('post-result');
+  resultDiv.innerHTML =
+    '<h3>Your dish was created! <br> You can create a new one or go back to start your post</h3>';
+};
 
 // event listener
 form.addEventListener('submit', async event => {

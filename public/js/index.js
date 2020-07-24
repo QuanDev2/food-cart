@@ -10,6 +10,60 @@ $('.ui .item').on('click', function () {
   $(this).addClass('active');
 });
 
+const showSuccess = () => {
+  let resultDiv = document.getElementById('post-result');
+  resultDiv.innerHTML = '<h3>Your order was placed!</h3>';
+};
+
+const removeOrderItems = () => {
+  document.querySelectorAll('.order-items .item').forEach(elem => {
+    elem.remove();
+  });
+};
+
+const resetQuantity = () => {
+  document
+    .querySelectorAll('.ui.compact.selection.dropdown.qty-dropdown')
+    .forEach(elem => {
+      elem.children[1].textContent = 'Quantity';
+    });
+};
+
+const resetOrder = () => {
+  showSuccess();
+  removeOrderItems();
+  document.getElementById('total').textContent = '0';
+};
+
+placeOrderBtn = document.getElementById('place-order-btn');
+placeOrderBtn.addEventListener('click', async event => {
+  orderList = [];
+  // collect all order items
+  document.querySelectorAll('.order-items .item').forEach(elem => {
+    const content = elem.children[1].children;
+    const dishName = content[0].textContent;
+    const price = content[1].children[0].textContent.substring(1);
+    const qty = content[1].children[1].textContent.substring(5);
+    orderList.push({
+      dishName: dishName,
+      price: price,
+      quantity: qty
+    });
+  });
+  // send to the server
+  try {
+    const res = await axios.post('/new-order', {
+      orderList
+    });
+    // console.log(res);
+  } catch (err) {
+    throw err;
+  }
+  // show success
+
+  resetOrder();
+});
+
 // get info of all posts
 let numPosts = document.getElementsByClassName('dish').length;
 
@@ -64,8 +118,9 @@ window.addEventListener('DOMContentLoaded', function () {
       }
       let lineTotal = dishPrice * qty;
       total += lineTotal;
-      console.log(total);
+      // console.log(total);
       insertOrderItem(dishName, lineTotal, qty, imgUrl);
+      resetQuantity();
       updateTotal(total);
     });
   }
