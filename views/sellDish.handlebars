@@ -8,21 +8,18 @@
       <i class="dropdown icon"></i>
       <div class="text">Seller Name</div>
       <div class="menu" tabindex="-1">
-        <div class="item">Chef Ramsey</div>
-        <div class="item">Ms. Kristin</div>
-        <div class="item">Q</div>
+        {{#each allSellers}}
+        {{> sellerMenu}}
+        {{/each}}
       </div>
     </div>
     <div id="dishMenu" class="ui selection dropdown" tabindex="0">
       <i class="dropdown icon"></i>
       <div class="text">Dish Name</div>
       <div class="menu" tabindex="-1">
-        <div class="item">Bo Ne</div>
-        <div class="item">Broken Rice</div>
-        <div class="item">Egg Rolls</div>
-        <div class="item">Grilled Pork Vermicelli</div>
-        <div class="item">Pho</div>
-        <div class="item">Spring Rolls</div>
+        {{#each allDishes}}
+        {{> dishMenu}}
+        {{/each}}
       </div>
     </div>
     <div class="field input-container">

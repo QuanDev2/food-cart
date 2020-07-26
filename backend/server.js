@@ -74,21 +74,36 @@ app.post('/create-dish', (req, res) => {
 
 app.post('/sign-up', (req, res) => {
   console.log(req.body);
+  let query =
+    `INSERT INTO ${req.body.accountType} (username, ${req.body.accountType}Name, password, email, phoneNumber) ` +
+    `VALUES ("${req.body.username}", "${req.body.fullName}", "${req.body.password}", "${req.body.email}", "${req.body.phoneNumber}") ;`;
 
-  if (req.body.fullName !== '') {
+  mysql.pool.query(query, (err, results) => {
+    if (err) throw err;
     res.send('OK');
-  } else {
-    res.status('403').send('post failed');
-  }
+  });
 });
-
 app.post('/create-post', (req, res) => {
   console.log(req.body);
   res.send('OK');
 });
 
 app.get('/sell-dish', (req, res) => {
-  res.render('sellDish');
+  let query = `SELECT sellerName from seller`;
+  let query2 = `SELECT dishName from dish`;
+  mysql.pool.query(query, (err, sellerNames) => {
+    if (err) throw err;
+    console.log(sellerNames);
+
+    mysql.pool.query(query2, (err, dishNames) => {
+      if (err) throw err;
+      console.log(dishNames);
+      res.render('sellDish', {
+        allSellers: sellerNames,
+        allDishes: dishNames
+      });
+    });
+  });
 });
 
 app.get('/create-dish', (req, res) => {
