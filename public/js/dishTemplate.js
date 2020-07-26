@@ -29,7 +29,7 @@ templates['dish'] = template({"compiler":[8,">= 4.3.0"],"main":function(containe
   return "<div class=\"dish\">\n  <div class=\"info\">\n    <div class=\"dish-name\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"dishName") || (depth0 != null ? lookupProperty(depth0,"dishName") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"dishName","hash":{},"data":data,"loc":{"start":{"line":3,"column":27},"end":{"line":3,"column":39}}}) : helper)))
     + "</div>\n    <div class=\"seller-name\">"
-    + alias4(((helper = (helper = lookupProperty(helpers,"seller") || (depth0 != null ? lookupProperty(depth0,"seller") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"seller","hash":{},"data":data,"loc":{"start":{"line":4,"column":29},"end":{"line":4,"column":39}}}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"sellerName") || (depth0 != null ? lookupProperty(depth0,"sellerName") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"sellerName","hash":{},"data":data,"loc":{"start":{"line":4,"column":29},"end":{"line":4,"column":43}}}) : helper)))
     + "</div>\n    <div class=\"dish-price\">$"
     + alias4(((helper = (helper = lookupProperty(helpers,"price") || (depth0 != null ? lookupProperty(depth0,"price") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"price","hash":{},"data":data,"loc":{"start":{"line":5,"column":29},"end":{"line":5,"column":38}}}) : helper)))
     + "</div>\n  </div>\n  <img src="

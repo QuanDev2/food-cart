@@ -83,7 +83,7 @@ function insertPostItem(dishName, price, seller, imgUrl) {
   var postItemContext = {
     dishName: dishName,
     price: price,
-    seller: seller,
+    sellerName: seller,
     imgUrl: imgUrl
   };
   var postItemHTML = Handlebars.templates.dish(postItemContext);

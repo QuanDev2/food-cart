@@ -10,7 +10,8 @@ const showSuccess = () => {
 const priceElem = document.getElementById('price-input');
 const qtyElem = document.getElementById('qty-input');
 const form = document.getElementById('sell-dish-form');
-const nameElem = document.getElementById('dishMenu');
+const dishNameElem = document.getElementById('dishMenu');
+const sellerNameElem = document.getElementById('sellerNames');
 
 priceElem.parentElement.removeAttribute('data-error');
 document.querySelectorAll('.field input').forEach(elem => {
@@ -24,6 +25,7 @@ form.addEventListener('submit', async event => {
 
   event.preventDefault();
   const dishName = $('#dishMenu').dropdown('get text');
+  const sellerName = $('#sellerNames').dropdown('get text');
   // validate price as number
   // console.log(type(qtyElem.value));
   if (isNaN(priceElem.value) || priceElem.value == '') {
@@ -38,14 +40,20 @@ form.addEventListener('submit', async event => {
     alert('Please choose a dish name');
     hasError = true;
   }
+  if (sellerName == 'Seller name') {
+    alert('Please choose a seller name');
+    hasError = true;
+  }
   if (hasError == true) return;
   try {
     const res = await axios.post('/create-post', {
       dishName: dishName,
       price: priceElem.value,
-      quantity: qtyElem.value
+      quantity: qtyElem.value,
+      sellerName: sellerName
     });
-    nameElem.children[1].textContent = 'Dish Name';
+    dishNameElem.children[1].textContent = 'Dish Name';
+    sellerNameElem.children[1].textContent = 'Seller Name';
     showSuccess();
   } catch (err) {
     throw err;
