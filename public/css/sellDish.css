@@ -17,6 +17,14 @@
   margin: 0.7em 0;
   /* height: 100%; */
 }
+
+#sellerNames,
+#dishMenu {
+  display: block;
+  max-width: 50%;
+  margin: 1.5em 0;
+}
+
 /* 
 #dishMenu {
   width: 200px;

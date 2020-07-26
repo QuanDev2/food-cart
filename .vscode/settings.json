@@ -1,0 +1,16 @@
+{
+  "sqltools.connections": [
+    {
+      "askForPassword": true,
+      "connectString": "mysql://ff9wigitfa151kog:wl528iake408c175@u3r5w4ayhxzdrw87.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/icn0giuzhwu77xsh",
+      "driver": "MariaDB",
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "name": "heroku",
+      "port": 3306,
+      "previewLimit": 50,
+      "server": "localhost"
+    }
+  ]
+}

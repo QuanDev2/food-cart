@@ -21,7 +21,7 @@ const handleSubmit = async event => {
       username: username,
       password: password,
       email: email,
-      phone: phone,
+      phoneNumber: phone,
       accountType: accountType
     });
 
@@ -29,10 +29,9 @@ const handleSubmit = async event => {
     if (res.status === 200) {
       signUpForm.reset();
       showSuccess();
-    } else {
     }
   } catch (err) {
-    showError();
+    console.log(err);
   }
 };
 

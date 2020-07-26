@@ -29,11 +29,35 @@ templates['dish'] = template({"compiler":[8,">= 4.3.0"],"main":function(containe
   return "<div class=\"dish\">\n  <div class=\"info\">\n    <div class=\"dish-name\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"dishName") || (depth0 != null ? lookupProperty(depth0,"dishName") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"dishName","hash":{},"data":data,"loc":{"start":{"line":3,"column":27},"end":{"line":3,"column":39}}}) : helper)))
     + "</div>\n    <div class=\"seller-name\">"
-    + alias4(((helper = (helper = lookupProperty(helpers,"seller") || (depth0 != null ? lookupProperty(depth0,"seller") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"seller","hash":{},"data":data,"loc":{"start":{"line":4,"column":29},"end":{"line":4,"column":39}}}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"sellerName") || (depth0 != null ? lookupProperty(depth0,"sellerName") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"sellerName","hash":{},"data":data,"loc":{"start":{"line":4,"column":29},"end":{"line":4,"column":43}}}) : helper)))
     + "</div>\n    <div class=\"dish-price\">$"
     + alias4(((helper = (helper = lookupProperty(helpers,"price") || (depth0 != null ? lookupProperty(depth0,"price") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"price","hash":{},"data":data,"loc":{"start":{"line":5,"column":29},"end":{"line":5,"column":38}}}) : helper)))
     + "</div>\n  </div>\n  <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"imgUrl") || (depth0 != null ? lookupProperty(depth0,"imgUrl") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"imgUrl","hash":{},"data":data,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":21}}}) : helper)))
     + " alt=\"\" />\n  <div class=\"checkout-btn-container\" data-error=\"Error\">\n\n    <div class=\"ui compact selection dropdown qty-dropdown\">\n\n      <i class=\"dropdown icon\"></i>\n      <div class=\"text\">Quantity</div>\n      <div class=\"menu\">\n        <div class=\"item\">1</div>\n        <div class=\"item\">2</div>\n        <div class=\"item\">3</div>\n        <div class=\"item\">4</div>\n        <div class=\"item\">5</div>\n      </div>\n\n    </div>\n    <div class=\"cart-btn ui button blue\" tabindex=\"0\">\n      Add to cart\n    </div>\n  </div>\n</div>";
+},"useData":true});
+templates['sellerMenu'] = template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "<div class=\"item\">"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"sellerName") || (depth0 != null ? lookupProperty(depth0,"sellerName") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"sellerName","hash":{},"data":data,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":32}}}) : helper)))
+    + "</div>";
+},"useData":true});
+templates['dishMenu'] = template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "<div class=\"item\">"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"dishName") || (depth0 != null ? lookupProperty(depth0,"dishName") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"dishName","hash":{},"data":data,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":30}}}) : helper)))
+    + "</div>";
 },"useData":true});
 })();
