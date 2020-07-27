@@ -98,22 +98,45 @@ app.get('/sell-dish', (req, res) => {
 });
 
 app.post('/create-post', (req, res) => {
-  console.log(document.getElementById('seller-name'));
-  var sellerName = document.getElementById('seller-name');
-  mysql.pool.query(`SELECT sellerID FROM seller WHERE sellerName = '${sellerName}'`, (err, results) => {
-    if (err) throw err;
-  });
-  var sellerID = results[0].sellerID;
-  console.log(sellerID);
-  var newPost = {
-    sellerID: sellerID,
-    price: req.body.dish-price,
-    quantity: req.body.dish-quantity
-  };
-  mysql.pool.query('INSERT INTO post SET ?', newPost, (err, results) => {
-    if (err) throw err;
-    res.send('OK');
-  });
+  console.log('Req body:');
+  console.log(req.body);
+  const sellerID = 0;
+  mysql.pool.query(
+    `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`,
+    (err, results) => {
+      if (err) throw err;
+      var newPost = {
+        sellerID: results[0].sellerID,
+        price: req.body.price,
+        quantity: req.body.quantity
+      };
+      console.log('New post:');
+      console.log(newPost);
+
+      mysql.pool.query('INSERT INTO post SET ?', newPost, (err, results) => {
+        if (err) throw err;
+        mysql.pool.query(
+          'SELECT postID FROM post ORDER BY postID DESC LIMIT 1;',
+          (err, results) => {
+            if (err) throw err;
+            console.log(results);
+            const newPostID = results[0].postID;
+
+            // query to insert dishPost
+            mysql.pool.query(
+              `INSERT INTO dishPost (dishID, postID)
+              VALUES
+              ((SELECT dishID FROM dish WHERE dishName = '${req.body.dishName}'), (select postID from post order by postID desc limit 1));`,
+              (err, results) => {
+                if (err) throw err;
+                res.send('OK');
+              }
+            );
+          }
+        );
+      });
+    }
+  );
 });
 
 app.get('/create-dish', (req, res) => {
