@@ -51,7 +51,6 @@ app.post('/new-order', (req, res) => {
 });
 
 app.post('/create-dish', (req, res) => {
-  console.log(req.body);
   // check if dish already exists
 
   let existQuery = `SELECT EXISTS(SELECT * from dish WHERE dishName='${req.body.dishName}')`;
@@ -73,19 +72,13 @@ app.post('/create-dish', (req, res) => {
 });
 
 app.post('/sign-up', (req, res) => {
-  console.log(req.body);
   let query =
     `INSERT INTO ${req.body.accountType} (username, ${req.body.accountType}Name, password, email, phoneNumber) ` +
     `VALUES ("${req.body.username}", "${req.body.fullName}", "${req.body.password}", "${req.body.email}", "${req.body.phoneNumber}") ;`;
-
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
     res.send('OK');
   });
-});
-app.post('/create-post', (req, res) => {
-  console.log(req.body);
-  res.send('OK');
 });
 
 app.get('/sell-dish', (req, res) => {
@@ -93,17 +86,57 @@ app.get('/sell-dish', (req, res) => {
   let query2 = `SELECT dishName from dish`;
   mysql.pool.query(query, (err, sellerNames) => {
     if (err) throw err;
-    console.log(sellerNames);
 
     mysql.pool.query(query2, (err, dishNames) => {
       if (err) throw err;
-      console.log(dishNames);
       res.render('sellDish', {
         allSellers: sellerNames,
         allDishes: dishNames
       });
     });
   });
+});
+
+app.post('/create-post', (req, res) => {
+  console.log('Req body:');
+  console.log(req.body);
+  const sellerID = 0;
+  mysql.pool.query(
+    `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`,
+    (err, results) => {
+      if (err) throw err;
+      var newPost = {
+        sellerID: results[0].sellerID,
+        price: req.body.price,
+        quantity: req.body.quantity
+      };
+      console.log('New post:');
+      console.log(newPost);
+
+      mysql.pool.query('INSERT INTO post SET ?', newPost, (err, results) => {
+        if (err) throw err;
+        mysql.pool.query(
+          'SELECT postID FROM post ORDER BY postID DESC LIMIT 1;',
+          (err, results) => {
+            if (err) throw err;
+            console.log(results);
+            const newPostID = results[0].postID;
+
+            // query to insert dishPost
+            mysql.pool.query(
+              `INSERT INTO dishPost (dishID, postID)
+              VALUES
+              ((SELECT dishID FROM dish WHERE dishName = '${req.body.dishName}'), (select postID from post order by postID desc limit 1));`,
+              (err, results) => {
+                if (err) throw err;
+                res.send('OK');
+              }
+            );
+          }
+        );
+      });
+    }
+  );
 });
 
 app.get('/create-dish', (req, res) => {

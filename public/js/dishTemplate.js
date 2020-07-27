@@ -44,8 +44,8 @@ templates['sellerMenu'] = template({"compiler":[8,">= 4.3.0"],"main":function(co
         return undefined
     };
 
-  return "<div class=\"item\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"sellerName") || (depth0 != null ? lookupProperty(depth0,"sellerName") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"sellerName","hash":{},"data":data,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":32}}}) : helper)))
+  return "<div class=\"item\" id=\"seller-names\">"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"sellerName") || (depth0 != null ? lookupProperty(depth0,"sellerName") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"sellerName","hash":{},"data":data,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":50}}}) : helper)))
     + "</div>";
 },"useData":true});
 templates['dishMenu'] = template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -56,8 +56,8 @@ templates['dishMenu'] = template({"compiler":[8,">= 4.3.0"],"main":function(cont
         return undefined
     };
 
-  return "<div class=\"item\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"dishName") || (depth0 != null ? lookupProperty(depth0,"dishName") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"dishName","hash":{},"data":data,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":30}}}) : helper)))
+  return "<div class=\"item\" id=\"dish-names\">"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"dishName") || (depth0 != null ? lookupProperty(depth0,"dishName") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"dishName","hash":{},"data":data,"loc":{"start":{"line":1,"column":34},"end":{"line":1,"column":46}}}) : helper)))
     + "</div>";
 },"useData":true});
 })();
