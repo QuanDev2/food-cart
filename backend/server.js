@@ -81,6 +81,14 @@ app.post('/sign-up', (req, res) => {
   });
 });
 
+app.post('/manage-post', (req, res) => {
+  const query = `DELETE FROM post WHERE postID = ${req.body.postID}`;
+  mysql.pool.query(query, (err, results) => {
+    if (err) throw err;
+    res.send('OK');
+  });
+});
+
 app.get('/sell-dish', (req, res) => {
   let query = `SELECT sellerName from seller`;
   let query2 = `SELECT dishName from dish`;
@@ -148,7 +156,19 @@ app.get('/sign-up', (req, res) => {
 });
 
 app.get('/manage-posts', (req, res) => {
-  res.render('managePosts');
+  let query =
+    'SELECT post.postID, seller.sellerName, dish.dishName, post.price, post.quantity FROM post ' +
+    'JOIN seller USING (sellerID) ' +
+    'JOIN dishPost USING (postID) ' +
+    'JOIN dish USING (dishID) ' +
+    'ORDER BY seller.sellerName; ';
+  mysql.pool.query(query, (err, results) => {
+    if (err) throw err;
+    console.log('=============== Manage post data ==============');
+    res.render('managePosts', {
+      allPosts: results
+    });
+  });
 });
 
 app.get('/admin-portal', (req, res) => {

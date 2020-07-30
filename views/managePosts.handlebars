@@ -1,6 +1,8 @@
+<script type="module" src="/managePost.js" defer></script>
+
 <div class="form-container" id="manage-posts-container">
   <h2>Manage your posts</h2>
-  <div class="ui selection dropdown">
+  {{!-- <div class="ui selection dropdown">
     <i class="dropdown icon"></i>
     <div class="text">Select Seller Account</div>
     <div class="menu">
@@ -11,7 +13,7 @@
       <div class="item">Bkon</div>
       <div class="item">Ckon</div>
     </div>
-  </div>
+  </div> --}}
   <table class="ui blue table post-table">
     <colgroup>
       <col style="width: 200px;" />
@@ -30,28 +32,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>seller 1</td>
-        <td>Pho</td>
-        <td>
-          <div class="ui right labeled input price-input">
-            <label for="amount" class="ui label">$</label>
-            <input type="text" placeholder="10" id="amount" value="10" />
-            <div class="ui basic label">.00</div>
-          </div>
-        </td>
-        <td>
-          <div class="ui input focus">
-            <input class="quantity-input" type="text" placeholder="5" value="5" />
-          </div>
-        </td>
-        <td>
-          <div class="ui positive button update-btn">Update</div>
-        </td>
-        <td>
-          <div class="ui negative button delete-btn">Delete</div>
-        </td>
-      </tr>
+      {{#each allPosts}}
+      {{> managePostDish}}
+      {{/each}}
 
     </tbody>
   </table>
