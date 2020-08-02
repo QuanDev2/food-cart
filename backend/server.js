@@ -74,31 +74,35 @@ app.post('/new-order', async (req, res) => {
   const insertOrderQuery =
     `INSERT INTO customerOrder (customerID, total) ` +
     `VALUES ((SELECT customerID FROM customer WHERE customerName = '${req.body.customerName}'), ${orderTotal})`;
-  mysql.pool.query(insertOrderQuery, async (err, result) => {
-    if (err) throw err;
+  try {
+    await mysql.pool.query(insertOrderQuery);
+  } catch {
+    err => {
+      throw err;
+    };
+  }
 
-    // run query to get the latest orderID
-    const latestOrderIDQuery = `select orderID from customerOrder order by orderID desc limit 1`;
+  // run query to get the latest orderID
+  const latestOrderIDQuery = `select orderID from customerOrder order by orderID desc limit 1`;
 
-    // insert into orderPost
-    for (let i = 0; i < orderList.length; i++) {
-      const postID = orderList[i].postID;
-      const quantity = parseInt(orderList[i].quantity);
-      const price = parseFloat(orderList[i].price);
-      const subtotal = quantity * price;
-      const insertOrderPostQuery =
-        `INSERT INTO orderPost (postID, orderID, quantity, subtotal) VALUES(` +
-        `${postID} ,(${latestOrderIDQuery}), ${quantity}, ${subtotal})`;
-      try {
-        result = await mysql.pool.query(insertOrderPostQuery);
-      } catch {
-        err => {
-          throw err;
-        };
-      }
+  // insert into orderPost
+  for (let i = 0; i < orderList.length; i++) {
+    const postID = orderList[i].postID;
+    const quantity = parseInt(orderList[i].quantity);
+    const price = parseFloat(orderList[i].price);
+    const subtotal = quantity * price;
+    const insertOrderPostQuery =
+      `INSERT INTO orderPost (postID, orderID, quantity, subtotal) VALUES(` +
+      `${postID} ,(${latestOrderIDQuery}), ${quantity}, ${subtotal})`;
+    try {
+      await mysql.pool.query(insertOrderPostQuery);
+    } catch {
+      err => {
+        throw err;
+      };
     }
-    res.send('OK');
-  });
+  }
+  res.send('OK');
 });
 
 app.post('/create-dish', (req, res) => {
