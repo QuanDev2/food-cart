@@ -1,4 +1,4 @@
-<div class="dish">
+<div class="dish" data-postID={{postID}}>
   <div class="info">
     <div class="dish-name">{{dishName}}</div>
     <div class="seller-name">{{sellerName}}</div>
@@ -6,19 +6,11 @@
   </div>
   <img src={{imgUrl}} alt="" />
   <div class="checkout-btn-container" data-error="Error">
-
-    <div class="ui compact selection dropdown qty-dropdown">
-
-      <i class="dropdown icon"></i>
-      <div class="text">Quantity</div>
-      <div class="menu">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-        <div class="item">4</div>
-        <div class="item">5</div>
+    <div class="quantity-container">
+      <label class="qty-label" style="margin-right: 1em; font-weight: 600;">Quantity</label>
+      <div class="ui input focus">
+        <input class="quantity-input" type="text" placeholder="5" value="1" max={{quantity}} />
       </div>
-
     </div>
     <div class="cart-btn ui button blue" tabindex="0">
       Add to cart
