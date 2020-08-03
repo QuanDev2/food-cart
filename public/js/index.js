@@ -1,49 +1,49 @@
 // make dropdowns work
 $(document).ready(function () {
-  $('.ui.dropdown').dropdown();
+  $(".ui.dropdown").dropdown();
 });
 
-$('.ui.checkbox').checkbox();
+$(".ui.checkbox").checkbox();
 
-$('.ui .item').on('click', function () {
-  $('.ui .item').removeClass('active');
-  $(this).addClass('active');
+$(".ui .item").on("click", function () {
+  $(".ui .item").removeClass("active");
+  $(this).addClass("active");
 });
 
 const showSuccess = () => {
-  let resultDiv = document.getElementById('post-result');
-  resultDiv.innerHTML = '<h3>Your order was placed!</h3>';
+  let resultDiv = document.getElementById("post-result");
+  resultDiv.innerHTML = "<h3>Your order was placed!</h3>";
 };
 
 const removeOrderItems = () => {
-  document.querySelectorAll('.order-items .item').forEach(elem => {
+  document.querySelectorAll(".order-items .item").forEach((elem) => {
     elem.remove();
   });
 };
 
 const resetQuantity = () => {
   document
-    .querySelectorAll('.ui.compact.selection.dropdown.qty-dropdown')
-    .forEach(elem => {
-      elem.children[1].textContent = 'Quantity';
+    .querySelectorAll(".ui.compact.selection.dropdown.qty-dropdown")
+    .forEach((elem) => {
+      elem.children[1].textContent = "Quantity";
     });
 };
 
 const resetOrder = () => {
   showSuccess();
   removeOrderItems();
-  document.getElementById('total').textContent = '0';
+  document.getElementById("total").textContent = "0";
 };
 
 /********************
  * Place Order Button
  */
 
-placeOrderBtn = document.getElementById('place-order-btn');
-placeOrderBtn.addEventListener('click', async event => {
+placeOrderBtn = document.getElementById("place-order-btn");
+placeOrderBtn.addEventListener("click", async (event) => {
   orderList = [];
   // collect all order items
-  document.querySelectorAll('.order-items .item').forEach(elem => {
+  document.querySelectorAll(".order-items .item").forEach((elem) => {
     const content = elem.children[1].children;
     const dishName = content[0].textContent;
     const price = content[1].children[0].textContent.substring(1);
@@ -53,7 +53,7 @@ placeOrderBtn.addEventListener('click', async event => {
       dishName: dishName,
       price: price,
       quantity: qty,
-      postID: elem.dataset.postid
+      postID: elem.dataset.postid,
     });
   });
 
@@ -62,9 +62,10 @@ placeOrderBtn.addEventListener('click', async event => {
   // console.log(orderList);
   // send to the server
   try {
-    const res = await axios.post('/new-order', {
+    console.log(orderList);
+    const res = await axios.post("/new-order", {
       orders: orderList,
-      customerName: document.getElementById('customerName').innerText
+      customerName: document.getElementById("customerName").innerText,
     });
     // console.log(res);
   } catch (err) {
@@ -76,7 +77,7 @@ placeOrderBtn.addEventListener('click', async event => {
 });
 
 // get info of all posts
-let numPosts = document.getElementsByClassName('dish').length;
+let numPosts = document.getElementsByClassName("dish").length;
 
 function insertOrderItem(dishName, price, quantity, imgUrl, postID) {
   var orderItemContext = {
@@ -84,11 +85,11 @@ function insertOrderItem(dishName, price, quantity, imgUrl, postID) {
     price: price,
     quantity: quantity,
     imgUrl: imgUrl,
-    postID: postID
+    postID: postID,
   };
   var orderItemHTML = Handlebars.templates.orderItem(orderItemContext);
-  var orderContainer = document.querySelector('.order-items');
-  orderContainer.insertAdjacentHTML('beforeend', orderItemHTML);
+  var orderContainer = document.querySelector(".order-items");
+  orderContainer.insertAdjacentHTML("beforeend", orderItemHTML);
 }
 
 function insertPostItem(dishName, price, seller, imgUrl) {
@@ -96,18 +97,18 @@ function insertPostItem(dishName, price, seller, imgUrl) {
     dishName: dishName,
     price: price,
     sellerName: seller,
-    imgUrl: imgUrl
+    imgUrl: imgUrl,
   };
   var postItemHTML = Handlebars.templates.dish(postItemContext);
-  var postContainer = document.getElementById('dishes');
-  postContainer.insertAdjacentHTML('beforeend', postItemHTML);
+  var postContainer = document.getElementById("dishes");
+  postContainer.insertAdjacentHTML("beforeend", postItemHTML);
 }
 
 function updateTotal(total) {
   // remove total before inserting
 
   // insert new total
-  totalHtml = document.getElementById('total');
+  totalHtml = document.getElementById("total");
   totalHtml.innerHTML = total;
 }
 
@@ -119,7 +120,7 @@ let allPosts = [];
  * re-inserted into the DOM.
  */
 function clearSearchAndReinsertPosts() {
-  document.getElementById('nav-search-input').value = '';
+  document.getElementById("nav-search-input").value = "";
   doSearchUpdate();
 }
 
@@ -151,12 +152,12 @@ function doSearchUpdate() {
   /*
    * Grab the search query from the navbar search box.
    */
-  var searchQuery = document.getElementById('nav-search-input').value;
+  var searchQuery = document.getElementById("nav-search-input").value;
 
   /*
    * Remove all posts from the DOM temporarily.
    */
-  var postContainer = document.getElementById('dishes');
+  var postContainer = document.getElementById("dishes");
   if (postContainer) {
     while (postContainer.lastChild) {
       postContainer.removeChild(postContainer.lastChild);
@@ -187,34 +188,34 @@ function doSearchUpdate() {
 function parsePostElem(postElem) {
   var post = {};
 
-  var dishNameElem = postElem.querySelector('.dish-name');
+  var dishNameElem = postElem.querySelector(".dish-name");
   post.dishName = dishNameElem.textContent.trim();
-  var priceElem = postElem.querySelector('.dish-price');
+  var priceElem = postElem.querySelector(".dish-price");
   post.price = priceElem.textContent.substring(1).trim();
-  var sellerElem = postElem.querySelector('.seller-name');
+  var sellerElem = postElem.querySelector(".seller-name");
   post.seller = sellerElem.textContent.trim();
-  var imgUrlElem = postElem.querySelector('img');
+  var imgUrlElem = postElem.querySelector("img");
   post.imgUrl = imgUrlElem.src;
 
   return post;
 }
 
 // Event listeners
-window.addEventListener('DOMContentLoaded', function () {
+window.addEventListener("DOMContentLoaded", function () {
   // Remember all of the existing twits in an array that we can use for search.
-  var postElemsCollection = document.getElementsByClassName('dish');
+  var postElemsCollection = document.getElementsByClassName("dish");
   for (var i = 0; i < postElemsCollection.length; i++) {
     allPosts.push(parsePostElem(postElemsCollection[i]));
   }
 
-  var searchButton = document.getElementById('nav-search-button');
+  var searchButton = document.getElementById("nav-search-button");
   if (searchButton) {
-    searchButton.addEventListener('click', doSearchUpdate);
+    searchButton.addEventListener("click", doSearchUpdate);
   }
 
-  var searchInput = document.getElementById('nav-search-input');
+  var searchInput = document.getElementById("nav-search-input");
   if (searchInput) {
-    searchInput.addEventListener('input', doSearchUpdate);
+    searchInput.addEventListener("input", doSearchUpdate);
   }
 
   var total = 0.0;
@@ -223,24 +224,24 @@ window.addEventListener('DOMContentLoaded', function () {
   // add event listener to every add-to-card button
 
   for (let i = 0; i < numPosts; i++) {
-    cartBtn = document.getElementsByClassName('cart-btn')[i];
-    cartBtn.addEventListener('click', event => {
+    cartBtn = document.getElementsByClassName("cart-btn")[i];
+    cartBtn.addEventListener("click", (event) => {
       let dishElement = event.target.parentNode.parentNode;
-      let dishName = dishElement.getElementsByClassName('dish-name')[0]
+      let dishName = dishElement.getElementsByClassName("dish-name")[0]
         .textContent;
       let dishPrice = parseFloat(
         dishElement
-          .getElementsByClassName('dish-price')[0]
+          .getElementsByClassName("dish-price")[0]
           .textContent.substr(1)
       );
-      let imgUrl = dishElement.getElementsByTagName('img')[0].src;
+      let imgUrl = dishElement.getElementsByTagName("img")[0].src;
       // show error if user hasn't chosen quantity
 
       let qty = parseInt(
-        document.getElementsByClassName('quantity-input')[i].value
+        document.getElementsByClassName("quantity-input")[i].value
       );
       if (isNaN(qty)) {
-        alert('Error: User has to pick quantity to Add to cart');
+        alert("Error: User has to pick quantity to Add to cart");
         return;
       }
       let lineTotal = dishPrice * qty;

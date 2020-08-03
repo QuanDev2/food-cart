@@ -30,27 +30,16 @@
           <th>Dish Name</th>
           <th>Quantity</th>
           <th>Customer Name</th>
-          <th>Total</th>
+          <th>Subtotal</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td data-label="order-id">1</td>
-          <td data-label="dish-name">Broken Rice</td>
-          <td data-label="quantity">2</td>
-          <td data-label="customer-name">John Doe</td>
-          <td data-label="total">$15.00</td>
-        </tr>
-        <tr>
-          <td data-label="order-id">1</td>
-          <td data-label="dish-name">Pho</td>
-          <td data-label="quantity">4</td>
-          <td data-label="customer-name">John Doe</td>
-          <td data-label="total">$30.00</td>
-        </tr>
       </tbody>
+
+      {{#each orderAdminItems}}
+      {{> orderAdminItem}}
+      {{/each}}
     </table>
-    <table class="ui celled table" id="customers-table">
+    {{!-- <table class="ui celled table" id="customers-table">
       <thead>
         <tr>
           <th>Username</th>
@@ -89,5 +78,5 @@
           <td data-label="phone-number">333-111-1111</td>
         </tr>
       </tbody>
-    </table>
+    </table> --}}
   </div>
