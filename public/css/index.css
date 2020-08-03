@@ -65,6 +65,10 @@ nav {
   margin-right: 0 !important;
 }
 
+.quantity-container .quantity-input {
+  width: 60px;
+}
+
 /* order sidebar */
 
 .smaller.image {

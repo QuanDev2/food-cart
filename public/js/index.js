@@ -35,6 +35,10 @@ const resetOrder = () => {
   document.getElementById('total').textContent = '0';
 };
 
+/********************
+ * Place Order Button
+ */
+
 placeOrderBtn = document.getElementById('place-order-btn');
 placeOrderBtn.addEventListener('click', async event => {
   orderList = [];
@@ -44,16 +48,23 @@ placeOrderBtn.addEventListener('click', async event => {
     const dishName = content[0].textContent;
     const price = content[1].children[0].textContent.substring(1);
     const qty = content[1].children[1].textContent.substring(5);
+
     orderList.push({
       dishName: dishName,
       price: price,
-      quantity: qty
+      quantity: qty,
+      postID: elem.dataset.postid
     });
   });
+
+  // grab customer name
+  // console.log(document.getElementById('customerName').innerText);
+  // console.log(orderList);
   // send to the server
   try {
     const res = await axios.post('/new-order', {
-      orderList
+      orders: orderList,
+      customerName: document.getElementById('customerName').innerText
     });
     // console.log(res);
   } catch (err) {
@@ -67,12 +78,13 @@ placeOrderBtn.addEventListener('click', async event => {
 // get info of all posts
 let numPosts = document.getElementsByClassName('dish').length;
 
-function insertOrderItem(dishName, price, quantity, imgUrl) {
+function insertOrderItem(dishName, price, quantity, imgUrl, postID) {
   var orderItemContext = {
     dishName: dishName,
     price: price,
     quantity: quantity,
-    imgUrl: imgUrl
+    imgUrl: imgUrl,
+    postID: postID
   };
   var orderItemHTML = Handlebars.templates.orderItem(orderItemContext);
   var orderContainer = document.querySelector('.order-items');
@@ -224,10 +236,8 @@ window.addEventListener('DOMContentLoaded', function () {
       let imgUrl = dishElement.getElementsByTagName('img')[0].src;
       // show error if user hasn't chosen quantity
 
-      let qty = parseFloat(
-        dishElement
-          .getElementsByClassName('qty-dropdown')[0]
-          .getElementsByClassName('text')[0].textContent
+      let qty = parseInt(
+        document.getElementsByClassName('quantity-input')[i].value
       );
       if (isNaN(qty)) {
         alert('Error: User has to pick quantity to Add to cart');
@@ -235,8 +245,9 @@ window.addEventListener('DOMContentLoaded', function () {
       }
       let lineTotal = dishPrice * qty;
       total += lineTotal;
-      // console.log(total);
-      insertOrderItem(dishName, lineTotal, qty, imgUrl);
+      // console.log(dishElement);
+      const postID = dishElement.dataset.postid;
+      insertOrderItem(dishName, lineTotal, qty, imgUrl, postID);
       resetQuantity();
       updateTotal(total);
     });

@@ -13,6 +13,15 @@
 
       </div>
       <hr />
+      <div id="customerNames" class="ui selection dropdown" tabindex="0">
+        <i class="dropdown icon"></i>
+        <div class="text" id="customerName">Customer Name</div>
+        <div class="menu" tabindex="-1">
+          {{#each allCustomers}}
+          {{> customerMenu}}
+          {{/each}}
+        </div>
+      </div>
       <h3 id="order-total">Order Total: $<span id="total">0</span></h3>
 
       <button id="place-order-btn" class="ui button blue place-order-btn" type="button">Place Order</button>

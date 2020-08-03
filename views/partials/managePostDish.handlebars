@@ -1,0 +1,22 @@
+<tr data-postID={{postID}}>
+  <td>{{sellerName}}</td>
+  <td>{{dishName}}</td>
+  <td>
+    <div class="ui right labeled input price-input">
+      <label for="amount" class="ui label">$</label>
+      <input type="text" placeholder="10" id="amount" value="{{price}}" />
+      <div class="ui basic label">.00</div>
+    </div>
+  </td>
+  <td>
+    <div class="ui input focus">
+      <input class="quantity-input" type="text" placeholder="5" value="{{quantity}}" />
+    </div>
+  </td>
+  <td>
+    <div class="ui positive button update-btn">Update</div>
+  </td>
+  <td>
+    <div class="ui negative button delete-btn">Delete</div>
+  </td>
+</tr>
