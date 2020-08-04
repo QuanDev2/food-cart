@@ -10,6 +10,9 @@ $(".ui .item").on("click", function () {
   $(this).addClass("active");
 });
 
+var total = 0.0;
+let orderList = [];
+
 const showSuccess = () => {
   let resultDiv = document.getElementById("post-result");
   resultDiv.innerHTML = "<h3>Your order was placed!</h3>";
@@ -32,10 +35,11 @@ const resetQuantity = () => {
 const resetOrder = () => {
   showSuccess();
   removeOrderItems();
+
   document.getElementById("total").textContent = "0";
 };
 
-/********************
+/**************************
  * Place Order Button
  */
 
@@ -46,12 +50,11 @@ placeOrderBtn.addEventListener("click", async (event) => {
   document.querySelectorAll(".order-items .item").forEach((elem) => {
     const content = elem.children[1].children;
     const dishName = content[0].textContent;
-    const price = content[1].children[0].textContent.substring(1);
+    const subtotal = content[1].children[0].textContent.substring(1);
     const qty = content[1].children[1].textContent.substring(5);
-
     orderList.push({
       dishName: dishName,
-      price: price,
+      subtotal: subtotal,
       quantity: qty,
       postID: elem.dataset.postid,
     });
@@ -72,7 +75,7 @@ placeOrderBtn.addEventListener("click", async (event) => {
     throw err;
   }
   // show success
-
+  total = 0;
   resetOrder();
 });
 
@@ -218,10 +221,9 @@ window.addEventListener("DOMContentLoaded", function () {
     searchInput.addEventListener("input", doSearchUpdate);
   }
 
-  var total = 0.0;
-  var orderList = [];
-
-  // add event listener to every add-to-card button
+  /******************************
+   * Add to Cart button
+   */
 
   for (let i = 0; i < numPosts; i++) {
     cartBtn = document.getElementsByClassName("cart-btn")[i];

@@ -6,6 +6,8 @@ var app = express();
 var bodyParser = require("body-parser");
 var port = process.env.PORT || 3000;
 
+var util = require("util");
+mysql.pool.query = util.promisify(mysql.pool.query);
 // base url for images
 const imgBaseUrl = "https://food-cart-images.s3-us-west-2.amazonaws.com/";
 
@@ -64,20 +66,19 @@ app.get("/", (req, res) => {
 
 app.post("/new-order", async (req, res) => {
   let orderTotal = 0;
-  // console.log("====================");
-  // sum up the total
-  req.body.orders.forEach((element) => {
-    orderTotal += parseInt(element.price) * parseInt(element.quantity);
-  });
-
-  // console.log(req.body.customerName);
   const orderList = req.body.orders;
-  // console.log(req.body);
+  console.log("====================");
+  // sum up the total
+  orderList.forEach((element) => {
+    console.log(element.subtotal);
+    orderTotal += parseFloat(element.subtotal);
+  });
+  console.log(orderTotal);
   const insertOrderQuery =
     `INSERT INTO customerOrder (customerID, total) ` +
     `VALUES ((SELECT customerID FROM customer WHERE customerName = '${req.body.customerName}'), ${orderTotal})`;
   try {
-    await mysql.pool.query(insertOrderQuery);
+    const result = await mysql.pool.query(insertOrderQuery);
   } catch (err) {
     throw err;
   }
@@ -87,11 +88,9 @@ app.post("/new-order", async (req, res) => {
 
   // insert into orderPost
   for (let i = 0; i < orderList.length; i++) {
-    const postID = orderList[i].postID;
+    const postID = parseInt(orderList[i].postID);
     const quantity = parseInt(orderList[i].quantity);
-    const price = parseFloat(orderList[i].price);
-    const subtotal = quantity * price;
-    console.log(subtotal);
+    const subtotal = parseFloat(orderList[i].subtotal);
     const insertOrderPostQuery =
       `INSERT INTO orderPost (postID, orderID, quantity, subtotal) VALUES(` +
       `${postID} ,(${latestOrderIDQuery}), ${quantity}, ${subtotal})`;
@@ -101,7 +100,6 @@ app.post("/new-order", async (req, res) => {
       throw err;
     }
   }
-
   res.send("OK");
 });
 
@@ -227,7 +225,7 @@ app.get("/manage-posts", (req, res) => {
     "ORDER BY seller.sellerName; ";
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
-    console.log("=============== Manage post data ==============");
+    // console.log("=============== Manage post data ==============");
     res.render("managePosts", {
       allPosts: results,
     });
@@ -246,7 +244,7 @@ app.get("/admin-portal", (req, res) => {
     `ORDER BY orderID;`;
 
   mysql.pool.query(orderQuery, (err, orderResults) => {
-    console.log(orderResults);
+    // console.log(orderResults);
     res.render("adminPortal", {
       orderAdminItems: orderResults,
     });
