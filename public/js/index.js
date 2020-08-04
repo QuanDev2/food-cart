@@ -25,18 +25,16 @@ const removeOrderItems = () => {
 };
 
 const resetQuantity = () => {
-  document
-    .querySelectorAll(".ui.compact.selection.dropdown.qty-dropdown")
-    .forEach((elem) => {
-      elem.children[1].textContent = "Quantity";
-    });
+  document.querySelectorAll(".quantity-input").forEach((elem) => {
+    elem.value = "1";
+  });
 };
 
 const resetOrder = () => {
   showSuccess();
   removeOrderItems();
-
   document.getElementById("total").textContent = "0";
+  document.getElementById("customerName").innerText = "Customer Name";
 };
 
 /**************************
@@ -253,6 +251,16 @@ window.addEventListener("DOMContentLoaded", function () {
       insertOrderItem(dishName, lineTotal, qty, imgUrl, postID);
       resetQuantity();
       updateTotal(total);
+
+      // attach event listener to x icon
+      document
+        .getElementsByClassName("order")[0]
+        .querySelector(`[data-postid = "${postID}"]`)
+        .addEventListener("click", (event) => {
+          event.target.parentNode.remove();
+          total -= lineTotal;
+          updateTotal(total);
+        });
     });
   }
 });
