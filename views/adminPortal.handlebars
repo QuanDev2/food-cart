@@ -13,14 +13,14 @@
     <a class="item customers-btn">
       Customers
     </a>
-    <div class="right menu">
+    {{!-- <div class="right menu">
       <div class="item">
         <div class="ui transparent icon input">
           <input type="text" placeholder="Search users...">
           <i class="search link icon"></i>
         </div>
       </div>
-    </div>
+    </div> --}}
   </div>
   <div class="ui bottom attached segment">
     <table class="ui celled table" id="orders-table">
@@ -39,44 +39,37 @@
       {{> orderAdminItem}}
       {{/each}}
     </table>
-    {{!-- <table class="ui celled table" id="customers-table">
+    <table class="ui celled table" id="customers-table">
       <thead>
         <tr>
           <th>Username</th>
           <th>Name</th>
-          <th>Password</th>
+
           <th>Email</th>
           <th>Phone Number</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td data-label="username">John_Doe</td>
-          <td data-label="name">John Doe</td>
-          <td data-label="password">123456</td>
-          <td data-label="email">John_Doe@gmail.com</td>
-          <td data-label="phone-number">111-111-1111</td>
-        </tr>
+        {{#each customerAdminItems}}
+        {{> customerAdminItem}}
+        {{/each}}
       </tbody>
     </table>
+
     <table class="ui celled table" id="sellers-table">
       <thead>
         <tr>
           <th>Username</th>
           <th>Name</th>
-          <th>Password</th>
+
           <th>Email</th>
           <th>Phone Number</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td data-label="username">Natatlie_P</td>
-          <td data-label="name">Natalie Portmann</td>
-          <td data-label="password">654321</td>
-          <td data-label="email">np@gmail.com</td>
-          <td data-label="phone-number">333-111-1111</td>
-        </tr>
+        {{#each sellerAdminItems}}
+        {{> sellerAdminItem}}
+        {{/each}}
       </tbody>
-    </table> --}}
+    </table>
   </div>

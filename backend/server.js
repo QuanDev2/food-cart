@@ -44,14 +44,12 @@ app.get("/", (req, res) => {
 
   mysql.pool.query(query, (err, posts) => {
     if (err) throw err;
-    // console.log(results);
 
     // get all customer names
     const customerQuery = `SELECT customerName, customerID FROM customer`;
 
     mysql.pool.query(customerQuery, (err, customerInfo) => {
       if (err) throw err;
-      // console.log(customerInfo);
       res.render("homepage", {
         dishes: posts,
         allCustomers: customerInfo,
@@ -67,13 +65,11 @@ app.get("/", (req, res) => {
 app.post("/new-order", async (req, res) => {
   let orderTotal = 0;
   const orderList = req.body.orders;
-  console.log("====================");
+
   // sum up the total
   orderList.forEach((element) => {
-    console.log(element.subtotal);
     orderTotal += parseFloat(element.subtotal);
   });
-  console.log(orderTotal);
   const insertOrderQuery =
     `INSERT INTO customerOrder (customerID, total) ` +
     `VALUES ((SELECT customerID FROM customer WHERE customerName = '${req.body.customerName}'), ${orderTotal})`;
@@ -167,8 +163,6 @@ app.get("/sell-dish", (req, res) => {
 });
 
 app.post("/create-post", (req, res) => {
-  // console.log('Req body:');
-  // console.log(req.body);
   const sellerID = 0;
   mysql.pool.query(
     `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`,
@@ -179,8 +173,6 @@ app.post("/create-post", (req, res) => {
         price: req.body.price,
         quantity: req.body.quantity,
       };
-      // console.log('New post:');
-      // console.log(newPost);
 
       mysql.pool.query("INSERT INTO post SET ?", newPost, (err, results) => {
         if (err) throw err;
@@ -188,7 +180,7 @@ app.post("/create-post", (req, res) => {
           "SELECT postID FROM post ORDER BY postID DESC LIMIT 1;",
           (err, results) => {
             if (err) throw err;
-            // console.log(results);
+
             const newPostID = results[0].postID;
 
             // query to insert dishPost
@@ -225,14 +217,14 @@ app.get("/manage-posts", (req, res) => {
     "ORDER BY seller.sellerName; ";
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
-    // console.log("=============== Manage post data ==============");
+
     res.render("managePosts", {
       allPosts: results,
     });
   });
 });
 
-app.get("/admin-portal", (req, res) => {
+app.get("/admin-portal", async (req, res) => {
   const orderQuery =
     `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName, orderPost.subtotal ` +
     `FROM orderPost ` +
@@ -243,22 +235,28 @@ app.get("/admin-portal", (req, res) => {
     `JOIN dish USING (dishID) ` +
     `ORDER BY orderID;`;
 
-  mysql.pool.query(orderQuery, (err, orderResults) => {
-    // console.log(orderResults);
-    res.render("adminPortal", {
-      orderAdminItems: orderResults,
-    });
-  });
+  const customerQuery = `SELECT username, customerName, email, phoneNumber FROM customer ORDER BY customerID`;
 
-  // try {
-  //   orderResults = await mysql.pool.query(orderQuery);
-  // } catch (err) {
-  //   throw err;
-  // }
-  // res.render("adminPortal", {
-  //   orderAdminItems: orderResults,
-  // });
+  const sellerQuery = `SELECT username, sellerName, email, phoneNumber FROM seller ORDER BY sellerID`;
+
+  const orderResults = await mysql.pool.query(orderQuery);
+  const customerResults = await mysql.pool.query(customerQuery);
+  const sellerResults = await mysql.pool.query(sellerQuery);
+  res.render("adminPortal", {
+    orderAdminItems: orderResults,
+    customerAdminItems: customerResults,
+    sellerAdminItems: sellerResults,
+  });
 });
+
+// try {
+//   orderResults = await mysql.pool.query(orderQuery);
+// } catch (err) {
+//   throw err;
+// }
+// res.render("adminPortal", {
+//   orderAdminItems: orderResults,
+// });
 
 app.listen(port, () => {
   console.log("server is listening on port ", port);
@@ -271,7 +269,7 @@ app.get("/viewdb", (req, res) => {
   let query2 = "select * from customer";
   mysql.pool.query(query2, (err, results) => {
     if (err) throw err;
-    // console.log(results);
+
     res.send("database created successfully!");
   });
 });
