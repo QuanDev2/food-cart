@@ -1,4 +1,4 @@
-@import 'sellDish.css';
+@import "sellDish.css";
 * {
   /* font-size: 18px; */
 }
@@ -48,7 +48,7 @@ nav {
 
 .seller-name::before,
 .seller-name::after {
-  content: '-';
+  content: "-";
   font-weight: 600;
   font-size: 20px;
   margin: 0 0.5em;
@@ -76,8 +76,8 @@ nav {
   height: 60px;
 }
 
-.order-container {
-  /* margin-left: 1em; */
+.x.icon {
+  cursor: pointer;
 }
 
 .place-order-btn {
@@ -167,7 +167,7 @@ hr {
 /* Admin Portal page */
 
 #admin-portal-container {
-  max-width: 45%;
+  max-width: 65%;
 }
 
 #admin-portal-container h2 {
