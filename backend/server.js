@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, "../public/src/img")));
 
 app.get("/", (req, res) => {
   let query =
-    "select post.postID ,dish.dishName, seller.sellerName, post.price, post.quantity from dish " +
+    "select post.postID ,dish.dishName, seller.sellerName, post.price from dish " +
     "join dishPost using (dishID) " +
     "join post using (postID) " +
     "join seller using (sellerID)";
@@ -139,7 +139,7 @@ app.post("/manage-post-delete", (req, res) => {
 });
 
 app.post("/manage-post-update", (req, res) => {
-  const query = `UPDATE post SET quantity = ${req.body.quantity}, price = ${req.body.price} WHERE postID = ${req.body.postID}`;
+  const query = `UPDATE post SET price = ${req.body.price} WHERE postID = ${req.body.postID}`;
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
     res.send("OK");
@@ -171,7 +171,6 @@ app.post("/create-post", (req, res) => {
       var newPost = {
         sellerID: results[0].sellerID,
         price: req.body.price,
-        quantity: req.body.quantity,
       };
 
       mysql.pool.query("INSERT INTO post SET ?", newPost, (err, results) => {
@@ -210,7 +209,7 @@ app.get("/sign-up", (req, res) => {
 
 app.get("/manage-posts", (req, res) => {
   let query =
-    "SELECT post.postID, seller.sellerName, dish.dishName, post.price, post.quantity FROM post " +
+    "SELECT post.postID, seller.sellerName, dish.dishName, post.price FROM post " +
     "JOIN seller USING (sellerID) " +
     "JOIN dishPost USING (postID) " +
     "JOIN dish USING (dishID) " +
@@ -238,38 +237,20 @@ app.get("/admin-portal", async (req, res) => {
   const customerQuery = `SELECT username, customerName, email, phoneNumber FROM customer ORDER BY customerID`;
 
   const sellerQuery = `SELECT username, sellerName, email, phoneNumber FROM seller ORDER BY sellerID`;
-
-  const orderResults = await mysql.pool.query(orderQuery);
-  const customerResults = await mysql.pool.query(customerQuery);
-  const sellerResults = await mysql.pool.query(sellerQuery);
-  res.render("adminPortal", {
-    orderAdminItems: orderResults,
-    customerAdminItems: customerResults,
-    sellerAdminItems: sellerResults,
-  });
+  try {
+    const orderResults = await mysql.pool.query(orderQuery);
+    const customerResults = await mysql.pool.query(customerQuery);
+    const sellerResults = await mysql.pool.query(sellerQuery);
+    res.render("adminPortal", {
+      orderAdminItems: orderResults,
+      customerAdminItems: customerResults,
+      sellerAdminItems: sellerResults,
+    });
+  } catch (err) {
+    throw err;
+  }
 });
-
-// try {
-//   orderResults = await mysql.pool.query(orderQuery);
-// } catch (err) {
-//   throw err;
-// }
-// res.render("adminPortal", {
-//   orderAdminItems: orderResults,
-// });
 
 app.listen(port, () => {
   console.log("server is listening on port ", port);
-});
-
-// testing db
-app.get("/viewdb", (req, res) => {
-  // let query =
-  //   'CREATE TABLE client (id INT(11) AUTO_INCREMENT NOT NULL ,first_name VARCHAR(255) NOT NULL,	last_name VARCHAR(255) NOT NULL,	dob DATE NOT NULL,	PRIMARY KEY (id),	CONSTRAINT full_name UNIQUE (first_name, last_name));';
-  let query2 = "select * from customer";
-  mysql.pool.query(query2, (err, results) => {
-    if (err) throw err;
-
-    res.send("database created successfully!");
-  });
 });
