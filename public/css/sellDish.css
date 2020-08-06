@@ -25,14 +25,13 @@
   margin: 1.5em 0;
 }
 
-/* 
-#dishMenu {
-  width: 200px;
-}
+/* ************ */
+/* Image Upload */
 
-#dishMenu::after {
-  content: attr(data-error);
-  color: #c92432;
-  position: relative;
-  left: 155px;
-} */
+#image-preview {
+  width: 200px;
+  height: 200px;
+  display: block;
+  margin-top: 1em;
+  object-fit: scale-down;
+}

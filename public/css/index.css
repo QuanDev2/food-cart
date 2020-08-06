@@ -1,7 +1,5 @@
 @import "sellDish.css";
-* {
-  /* font-size: 18px; */
-}
+
 /* Nav bar */
 nav {
   position: sticky;

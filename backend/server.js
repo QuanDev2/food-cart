@@ -20,16 +20,16 @@ app.engine(
   })
 );
 app.set("view engine", "handlebars");
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.set("mysql", mysql);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 // serve static files from public/
 
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.static(path.join(__dirname, "../public/css")));
 app.use(express.static(path.join(__dirname, "../public/js")));
-app.use(express.static(path.join(__dirname, "../public/src/img")));
+app.use(express.static(path.join(__dirname, "../public/assets")));
 
 /***************************
  * Serve the home page

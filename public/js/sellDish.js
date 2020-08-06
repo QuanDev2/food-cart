@@ -8,7 +8,6 @@ const showSuccess = () => {
 };
 
 const priceElem = document.getElementById("price-input");
-
 const form = document.getElementById("sell-dish-form");
 const dishNameElem = document.getElementById("dishMenu");
 const sellerNameElem = document.getElementById("sellerNames");
@@ -19,6 +18,20 @@ document.querySelectorAll(".field input").forEach((elem) => {
     elem.parentElement.removeAttribute("data-error");
   });
 });
+
+/******************************
+ * Handle preview image upload
+ */
+
+document.getElementById("image-upload").onchange = function () {
+  let reader = new FileReader();
+  reader.onload = function (event) {
+    // get loaded data and render thumbnail
+    document.getElementById("image-preview").src = event.target.result;
+  };
+  // read image file as data url
+  reader.readAsDataURL(this.files[0]);
+};
 
 form.addEventListener("submit", async (event) => {
   let hasError = false;
