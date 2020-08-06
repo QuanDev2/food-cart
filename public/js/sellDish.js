@@ -56,11 +56,17 @@ form.addEventListener("submit", async (event) => {
   }
   if (hasError == true) return;
   try {
-    const res = await axios.post("/create-post", {
-      dishName: dishName,
-      price: priceElem.value,
+    console.log(document.getElementById("image-upload").files[0]);
+    let formData = new FormData();
+    formData.set("dishName", dishName);
+    formData.set("price", priceElem.value);
+    formData.set("image", document.getElementById("image-upload").files[0]);
+    formData.set("sellerName", sellerName);
 
-      sellerName: sellerName,
+    const res = await axios.post("/create-post", formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
     });
     dishNameElem.children[1].textContent = "Dish Name";
     sellerNameElem.children[1].textContent = "Seller Name";

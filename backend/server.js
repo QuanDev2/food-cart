@@ -1,17 +1,39 @@
-var path = require("path");
-var express = require("express");
-var exphbs = require("express-handlebars");
-var mysql = require("./dbcon");
-var app = express();
-var bodyParser = require("body-parser");
-var port = process.env.PORT || 3000;
+const path = require("path");
+const express = require("express");
+const exphbs = require("express-handlebars");
+const mysql = require("./dbcon");
+const multer = require("multer");
+const app = express();
+const bodyParser = require("body-parser");
+const port = process.env.PORT || 3000;
 
-var util = require("util");
+const util = require("util");
 mysql.pool.query = util.promisify(mysql.pool.query);
 // base url for images
 const imgBaseUrl = "https://food-cart-images.s3-us-west-2.amazonaws.com/";
 
 var allDishData = require("./data/postData");
+
+/************************
+ * set up storage engine
+ */
+const storageEngine = multer.diskStorage({
+  destination: "./public/assets/img/",
+  filename: function (req, file, callback) {
+    callback(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+/**************************
+ * Init upload variable
+ */
+const upload = multer({
+  storage: storageEngine,
+}).single("image");
+
 // set up handlebars and view engine
 app.engine(
   "handlebars",
@@ -99,6 +121,10 @@ app.post("/new-order", async (req, res) => {
   res.send("OK");
 });
 
+/*********************************
+ * Handle create a new dish route
+ */
+
 app.post("/create-dish", (req, res) => {
   // check if dish already exists
 
@@ -163,40 +189,54 @@ app.get("/sell-dish", (req, res) => {
 });
 
 app.post("/create-post", (req, res) => {
-  const sellerID = 0;
-  mysql.pool.query(
-    `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`,
-    (err, results) => {
-      if (err) throw err;
-      var newPost = {
-        sellerID: results[0].sellerID,
-        price: req.body.price,
-      };
+  // handle image upload
+  upload(req, res, (err) => {
+    if (err) {
+      throw err;
+    } else {
+      console.log(req.body);
+      mysql.pool.query(
+        `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`,
+        (err, results) => {
+          if (err) throw err;
+          else {
+            console.log("results from seller ID query: ", results);
+            var newPost = {
+              sellerID: results[0].sellerID,
+              price: req.body.price,
+            };
 
-      mysql.pool.query("INSERT INTO post SET ?", newPost, (err, results) => {
-        if (err) throw err;
-        mysql.pool.query(
-          "SELECT postID FROM post ORDER BY postID DESC LIMIT 1;",
-          (err, results) => {
-            if (err) throw err;
-
-            const newPostID = results[0].postID;
-
-            // query to insert dishPost
             mysql.pool.query(
-              `INSERT INTO dishPost (dishID, postID)
-              VALUES
-              ((SELECT dishID FROM dish WHERE dishName = '${req.body.dishName}'), (select postID from post order by postID desc limit 1));`,
+              "INSERT INTO post SET ?",
+              newPost,
               (err, results) => {
                 if (err) throw err;
-                res.send("OK");
+                mysql.pool.query(
+                  "SELECT postID FROM post ORDER BY postID DESC LIMIT 1;",
+                  (err, results) => {
+                    if (err) throw err;
+
+                    const newPostID = results[0].postID;
+
+                    // query to insert dishPost
+                    mysql.pool.query(
+                      `INSERT INTO dishPost (dishID, postID)
+                  VALUES
+                  ((SELECT dishID FROM dish WHERE dishName = '${req.body.dishName}'), (select postID from post order by postID desc limit 1));`,
+                      (err, results) => {
+                        if (err) throw err;
+                        res.send("OK");
+                      }
+                    );
+                  }
+                );
               }
             );
           }
-        );
-      });
+        }
+      );
     }
-  );
+  });
 });
 
 app.get("/create-dish", (req, res) => {
