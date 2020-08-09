@@ -1,68 +1,68 @@
-const path = require("path");
-const express = require("express");
-const exphbs = require("express-handlebars");
-const mysql = require("./dbcon");
-const multer = require("multer");
+const path = require('path');
+const express = require('express');
+const exphbs = require('express-handlebars');
+const mysql = require('./dbcon');
+const multer = require('multer');
 const app = express();
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
 
-const util = require("util");
+const util = require('util');
 mysql.pool.query = util.promisify(mysql.pool.query);
 // base url for images
-const imgBaseUrl = "https://food-cart-images.s3-us-west-2.amazonaws.com/";
+const imgBaseUrl = 'https://food-cart-images.s3-us-west-2.amazonaws.com/';
 
-var allDishData = require("./data/postData");
+var allDishData = require('./data/postData');
 
-/************************
+/**************************
  * set up storage engine
  */
 const storageEngine = multer.diskStorage({
-  destination: "./public/assets/img/",
+  destination: './public/assets/img/',
   filename: function (req, file, callback) {
     callback(
       null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+      file.fieldname + '-' + Date.now() + path.extname(file.originalname)
     );
-  },
+  }
 });
 
 /**************************
  * Init upload variable
  */
 const upload = multer({
-  storage: storageEngine,
-}).single("image");
+  storage: storageEngine
+}).single('image');
 
 // set up handlebars and view engine
 app.engine(
-  "handlebars",
+  'handlebars',
   exphbs({
-    defaultLayout: "main",
+    defaultLayout: 'main'
   })
 );
-app.set("view engine", "handlebars");
+app.set('view engine', 'handlebars');
 
-app.set("mysql", mysql);
+app.set('mysql', mysql);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // serve static files from public/
 
-app.use(express.static(path.join(__dirname, "../public")));
-app.use(express.static(path.join(__dirname, "../public/css")));
-app.use(express.static(path.join(__dirname, "../public/js")));
-app.use(express.static(path.join(__dirname, "../public/assets")));
+app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../public/css')));
+app.use(express.static(path.join(__dirname, '../public/js')));
+app.use(express.static(path.join(__dirname, '../public/assets/img')));
 
 /***************************
  * Serve the home page
  */
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   let query =
-    "select post.postID ,dish.dishName, seller.sellerName, post.price from dish " +
-    "join dishPost using (dishID) " +
-    "join post using (postID) " +
-    "join seller using (sellerID)";
+    'select post.postID ,dish.dishName, seller.sellerName, post.price, post.image from dish ' +
+    'join dishPost using (dishID) ' +
+    'join post using (postID) ' +
+    'join seller using (sellerID)';
 
   mysql.pool.query(query, (err, posts) => {
     if (err) throw err;
@@ -72,9 +72,10 @@ app.get("/", (req, res) => {
 
     mysql.pool.query(customerQuery, (err, customerInfo) => {
       if (err) throw err;
-      res.render("homepage", {
+      res.render('homepage', {
         dishes: posts,
         allCustomers: customerInfo,
+        showSearchBox: true
       });
     });
   });
@@ -84,12 +85,12 @@ app.get("/", (req, res) => {
  * Handle new post from home page
  */
 
-app.post("/new-order", async (req, res) => {
+app.post('/new-order', async (req, res) => {
   let orderTotal = 0;
   const orderList = req.body.orders;
 
   // sum up the total
-  orderList.forEach((element) => {
+  orderList.forEach(element => {
     orderTotal += parseFloat(element.subtotal);
   });
   const insertOrderQuery =
@@ -118,14 +119,14 @@ app.post("/new-order", async (req, res) => {
       throw err;
     }
   }
-  res.send("OK");
+  res.send('OK');
 });
 
 /*********************************
  * Handle create a new dish route
  */
 
-app.post("/create-dish", (req, res) => {
+app.post('/create-dish', (req, res) => {
   // check if dish already exists
 
   let existQuery = `SELECT EXISTS(SELECT * from dish WHERE dishName='${req.body.dishName}')`;
@@ -134,45 +135,45 @@ app.post("/create-dish", (req, res) => {
     const dishExists = Object.values(results[0]);
     if (dishExists == true) {
       // if yes, send error 403
-      res.sendStatus("403");
+      res.sendStatus('403');
     } else {
       // if no, send OK
       let query = `INSERT INTO dish (dishName) VALUES ('${req.body.dishName}');`;
       mysql.pool.query(query, (err, results) => {
         if (err) throw err;
       });
-      res.send("OK");
+      res.send('OK');
     }
   });
 });
 
-app.post("/sign-up", (req, res) => {
+app.post('/sign-up', (req, res) => {
   let query =
     `INSERT INTO ${req.body.accountType} (username, ${req.body.accountType}Name, password, email, phoneNumber) ` +
     `VALUES ("${req.body.username}", "${req.body.fullName}", "${req.body.password}", "${req.body.email}", "${req.body.phoneNumber}") ;`;
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
-    res.send("OK");
+    res.send('OK');
   });
 });
 
-app.post("/manage-post-delete", (req, res) => {
+app.post('/manage-post-delete', (req, res) => {
   const query = `DELETE FROM post WHERE postID = ${req.body.postID}`;
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
-    res.send("OK");
+    res.send('OK');
   });
 });
 
-app.post("/manage-post-update", (req, res) => {
+app.post('/manage-post-update', (req, res) => {
   const query = `UPDATE post SET price = ${req.body.price} WHERE postID = ${req.body.postID}`;
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
-    res.send("OK");
+    res.send('OK');
   });
 });
 
-app.get("/sell-dish", (req, res) => {
+app.get('/sell-dish', (req, res) => {
   let query = `SELECT sellerName from seller`;
   let query2 = `SELECT dishName from dish`;
   mysql.pool.query(query, (err, sellerNames) => {
@@ -180,39 +181,39 @@ app.get("/sell-dish", (req, res) => {
 
     mysql.pool.query(query2, (err, dishNames) => {
       if (err) throw err;
-      res.render("sellDish", {
+      res.render('sellDish', {
         allSellers: sellerNames,
-        allDishes: dishNames,
+        allDishes: dishNames
       });
     });
   });
 });
 
-app.post("/create-post", (req, res) => {
+app.post('/create-post', (req, res) => {
   // handle image upload
-  upload(req, res, (err) => {
+  upload(req, res, err => {
     if (err) {
       throw err;
     } else {
-      console.log(req.body);
       mysql.pool.query(
         `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`,
         (err, results) => {
           if (err) throw err;
           else {
-            console.log("results from seller ID query: ", results);
             var newPost = {
               sellerID: results[0].sellerID,
               price: req.body.price,
+              image: req.file.filename
             };
 
+            // insert data into post
             mysql.pool.query(
-              "INSERT INTO post SET ?",
+              'INSERT INTO post SET ?',
               newPost,
               (err, results) => {
                 if (err) throw err;
                 mysql.pool.query(
-                  "SELECT postID FROM post ORDER BY postID DESC LIMIT 1;",
+                  'SELECT postID FROM post ORDER BY postID DESC LIMIT 1;',
                   (err, results) => {
                     if (err) throw err;
 
@@ -225,7 +226,7 @@ app.post("/create-post", (req, res) => {
                   ((SELECT dishID FROM dish WHERE dishName = '${req.body.dishName}'), (select postID from post order by postID desc limit 1));`,
                       (err, results) => {
                         if (err) throw err;
-                        res.send("OK");
+                        res.send('OK');
                       }
                     );
                   }
@@ -239,31 +240,31 @@ app.post("/create-post", (req, res) => {
   });
 });
 
-app.get("/create-dish", (req, res) => {
-  res.render("createDish");
+app.get('/create-dish', (req, res) => {
+  res.render('createDish');
 });
 
-app.get("/sign-up", (req, res) => {
-  res.render("signUp");
+app.get('/sign-up', (req, res) => {
+  res.render('signUp');
 });
 
-app.get("/manage-posts", (req, res) => {
+app.get('/manage-posts', (req, res) => {
   let query =
-    "SELECT post.postID, seller.sellerName, dish.dishName, post.price FROM post " +
-    "JOIN seller USING (sellerID) " +
-    "JOIN dishPost USING (postID) " +
-    "JOIN dish USING (dishID) " +
-    "ORDER BY seller.sellerName; ";
+    'SELECT post.postID, seller.sellerName, dish.dishName, post.price FROM post ' +
+    'JOIN seller USING (sellerID) ' +
+    'JOIN dishPost USING (postID) ' +
+    'JOIN dish USING (dishID) ' +
+    'ORDER BY seller.sellerName; ';
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
 
-    res.render("managePosts", {
-      allPosts: results,
+    res.render('managePosts', {
+      allPosts: results
     });
   });
 });
 
-app.get("/admin-portal", async (req, res) => {
+app.get('/admin-portal', async (req, res) => {
   const orderQuery =
     `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName, orderPost.subtotal ` +
     `FROM orderPost ` +
@@ -281,10 +282,10 @@ app.get("/admin-portal", async (req, res) => {
     const orderResults = await mysql.pool.query(orderQuery);
     const customerResults = await mysql.pool.query(customerQuery);
     const sellerResults = await mysql.pool.query(sellerQuery);
-    res.render("adminPortal", {
+    res.render('adminPortal', {
       orderAdminItems: orderResults,
       customerAdminItems: customerResults,
-      sellerAdminItems: sellerResults,
+      sellerAdminItems: sellerResults
     });
   } catch (err) {
     throw err;
@@ -292,5 +293,5 @@ app.get("/admin-portal", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log("server is listening on port ", port);
+  console.log('server is listening on port ', port);
 });
