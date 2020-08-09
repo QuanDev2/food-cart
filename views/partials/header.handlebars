@@ -2,12 +2,14 @@
   <nav class="ui menu nav-container">
     <a href="/" class="header item">Browse Dishes</a>
     <a href="#" class="item">About Us</a>
+    {{#if showSearchBox}}
     <div class="item">
       <div class="ui icon input">
         <input type="text" placeholder="Search for dishes" id="nav-search-input" />
         <i class="search icon" id="nav-search-btn"><a href="#"></a></i>
       </div>
     </div>
+    {{/if}}
 
     <a href="/manage-posts" class="item manage-post-btn">
       <button class="positive ui button">Manage posts</button>

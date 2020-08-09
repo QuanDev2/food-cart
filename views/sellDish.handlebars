@@ -26,11 +26,9 @@
       <label>Price</label>
       <input required id="price-input" type="text" name="dish-price" placeholder="10.00" />
     </div>
-    {{!-- <div class="field input-container">
-      <label>Quantity</label>
-      <input required id="qty-input" min="1" type="number" name="quantity" placeholder="1" />
-    </div> --}}
 
+    <input type="file" id="image-upload" />
+    <img id="image-preview" src="/image-placeholder.png" />
     <button class="ui button submit-btn blue" type="submit" style="display: block; margin-top: 1rem;">
       Post My Dish
     </button>
@@ -49,8 +47,9 @@
         <i class="add icon"></i>
       </div>
     </a>
-
   </div>
+
+
 </div>
 
 <style>
