@@ -81,7 +81,95 @@ app.get('/', (req, res) => {
   });
 });
 
+/**************************************
+ * Serve create new dish page
+ */
+
+app.get('/create-dish', (req, res) => {
+  res.render('createDish');
+});
+
+/**********************************
+ * Serve sign up page
+ */
+
+app.get('/sign-up', (req, res) => {
+  res.render('signUp');
+});
+
 /*****************************
+ * Serve manage posts page
+ */
+
+app.get('/manage-posts', (req, res) => {
+  let query =
+    'SELECT post.postID, seller.sellerName, dish.dishName, post.price FROM post ' +
+    'JOIN seller USING (sellerID) ' +
+    'JOIN dishPost USING (postID) ' +
+    'JOIN dish USING (dishID) ' +
+    'ORDER BY seller.sellerName; ';
+  mysql.pool.query(query, (err, results) => {
+    if (err) throw err;
+
+    res.render('managePosts', {
+      allPosts: results
+    });
+  });
+});
+
+/******************************
+ * Serve admin portal page
+ */
+
+app.get('/admin-portal', async (req, res) => {
+  const orderQuery =
+    `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName, orderPost.subtotal ` +
+    `FROM orderPost ` +
+    `JOIN customerOrder USING (orderID) ` +
+    `JOIN customer USING (customerID) ` +
+    `JOIN post USING (postID) ` +
+    `JOIN dishPost USING (postID) ` +
+    `JOIN dish USING (dishID) ` +
+    `ORDER BY orderID;`;
+
+  const customerQuery = `SELECT username, customerName, email, phoneNumber FROM customer ORDER BY customerID`;
+
+  const sellerQuery = `SELECT username, sellerName, email, phoneNumber FROM seller ORDER BY sellerID`;
+  try {
+    const orderResults = await mysql.pool.query(orderQuery);
+    const customerResults = await mysql.pool.query(customerQuery);
+    const sellerResults = await mysql.pool.query(sellerQuery);
+    res.render('adminPortal', {
+      orderAdminItems: orderResults,
+      customerAdminItems: customerResults,
+      sellerAdminItems: sellerResults
+    });
+  } catch (err) {
+    throw err;
+  }
+});
+
+/************************************
+ * Serve serve sell dish / new post
+ */
+
+app.get('/sell-dish', (req, res) => {
+  let query = `SELECT sellerName from seller`;
+  let query2 = `SELECT dishName from dish`;
+  mysql.pool.query(query, (err, sellerNames) => {
+    if (err) throw err;
+
+    mysql.pool.query(query2, (err, dishNames) => {
+      if (err) throw err;
+      res.render('sellDish', {
+        allSellers: sellerNames,
+        allDishes: dishNames
+      });
+    });
+  });
+});
+
+/********************************
  * Handle new post from home page
  */
 
@@ -147,6 +235,10 @@ app.post('/create-dish', (req, res) => {
   });
 });
 
+/***************************
+ * Handle new sign up
+ */
+
 app.post('/sign-up', (req, res) => {
   let query =
     `INSERT INTO ${req.body.accountType} (username, ${req.body.accountType}Name, password, email, phoneNumber) ` +
@@ -157,6 +249,10 @@ app.post('/sign-up', (req, res) => {
   });
 });
 
+/********************************************
+ * Handle delete post from manage post page
+ */
+
 app.post('/manage-post-delete', (req, res) => {
   const query = `DELETE FROM post WHERE postID = ${req.body.postID}`;
   mysql.pool.query(query, (err, results) => {
@@ -164,6 +260,10 @@ app.post('/manage-post-delete', (req, res) => {
     res.send('OK');
   });
 });
+
+/*********************************************
+ * Handle update post from manage post page
+ */
 
 app.post('/manage-post-update', (req, res) => {
   const query = `UPDATE post SET price = ${req.body.price} WHERE postID = ${req.body.postID}`;
@@ -173,123 +273,43 @@ app.post('/manage-post-update', (req, res) => {
   });
 });
 
-app.get('/sell-dish', (req, res) => {
-  let query = `SELECT sellerName from seller`;
-  let query2 = `SELECT dishName from dish`;
-  mysql.pool.query(query, (err, sellerNames) => {
-    if (err) throw err;
-
-    mysql.pool.query(query2, (err, dishNames) => {
-      if (err) throw err;
-      res.render('sellDish', {
-        allSellers: sellerNames,
-        allDishes: dishNames
-      });
-    });
-  });
-});
+/*****************************************
+ * Handle create a new post
+ */
 
 app.post('/create-post', (req, res) => {
   // handle image upload
-  upload(req, res, err => {
+  upload(req, res, async err => {
     if (err) {
       throw err;
     } else {
-      mysql.pool.query(
-        `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`,
-        (err, results) => {
-          if (err) throw err;
-          else {
-            var newPost = {
-              sellerID: results[0].sellerID,
-              price: req.body.price,
-              image: req.file.filename
-            };
-
-            // insert data into post
-            mysql.pool.query(
-              'INSERT INTO post SET ?',
-              newPost,
-              (err, results) => {
-                if (err) throw err;
-                mysql.pool.query(
-                  'SELECT postID FROM post ORDER BY postID DESC LIMIT 1;',
-                  (err, results) => {
-                    if (err) throw err;
-
-                    const newPostID = results[0].postID;
-
-                    // query to insert dishPost
-                    mysql.pool.query(
-                      `INSERT INTO dishPost (dishID, postID)
-                  VALUES
-                  ((SELECT dishID FROM dish WHERE dishName = '${req.body.dishName}'), (select postID from post order by postID desc limit 1));`,
-                      (err, results) => {
-                        if (err) throw err;
-                        res.send('OK');
-                      }
-                    );
-                  }
-                );
-              }
-            );
-          }
-        }
-      );
+      try {
+        const sellerIDResults = await mysql.pool.query(
+          `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`
+        );
+        var newPost = {
+          sellerID: sellerIDResults[0].sellerID,
+          price: req.body.price,
+          image: req.file.filename
+        };
+        const insertPostResults = await mysql.pool.query(
+          'INSERT INTO post SET ?',
+          newPost
+        );
+        // const newPostID = await mysql.pool.query(
+        //   'SELECT postID FROM post ORDER BY postID DESC LIMIT 1;')[0].postID;
+        // const newPostID = postIDResult[0].postID;
+        const insertDishPostResults = await mysql.pool.query(
+          `INSERT INTO dishPost (dishID, postID)
+        VALUES
+        ((SELECT dishID FROM dish WHERE dishName = '${req.body.dishName}'), (select postID from post order by postID desc limit 1));`
+        );
+        res.send('OK');
+      } catch (err) {
+        throw err;
+      }
     }
   });
-});
-
-app.get('/create-dish', (req, res) => {
-  res.render('createDish');
-});
-
-app.get('/sign-up', (req, res) => {
-  res.render('signUp');
-});
-
-app.get('/manage-posts', (req, res) => {
-  let query =
-    'SELECT post.postID, seller.sellerName, dish.dishName, post.price FROM post ' +
-    'JOIN seller USING (sellerID) ' +
-    'JOIN dishPost USING (postID) ' +
-    'JOIN dish USING (dishID) ' +
-    'ORDER BY seller.sellerName; ';
-  mysql.pool.query(query, (err, results) => {
-    if (err) throw err;
-
-    res.render('managePosts', {
-      allPosts: results
-    });
-  });
-});
-
-app.get('/admin-portal', async (req, res) => {
-  const orderQuery =
-    `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName, orderPost.subtotal ` +
-    `FROM orderPost ` +
-    `JOIN customerOrder USING (orderID) ` +
-    `JOIN customer USING (customerID) ` +
-    `JOIN post USING (postID) ` +
-    `JOIN dishPost USING (postID) ` +
-    `JOIN dish USING (dishID) ` +
-    `ORDER BY orderID;`;
-
-  const customerQuery = `SELECT username, customerName, email, phoneNumber FROM customer ORDER BY customerID`;
-
-  const sellerQuery = `SELECT username, sellerName, email, phoneNumber FROM seller ORDER BY sellerID`;
-  try {
-    const orderResults = await mysql.pool.query(orderQuery);
-    const customerResults = await mysql.pool.query(customerQuery);
-    const sellerResults = await mysql.pool.query(sellerQuery);
-    res.render('adminPortal', {
-      orderAdminItems: orderResults,
-      customerAdminItems: customerResults,
-      sellerAdminItems: sellerResults
-    });
-  } catch (err) {
-    throw err;
-  }
 });
 
 app.listen(port, () => {
