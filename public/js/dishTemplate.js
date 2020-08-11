@@ -14,7 +14,9 @@ templates['customerOrder'] = template({"compiler":[8,">= 4.3.0"],"main":function
     + alias4(((helper = (helper = lookupProperty(helpers,"customerName") || (depth0 != null ? lookupProperty(depth0,"customerName") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"customerName","hash":{},"data":data,"loc":{"start":{"line":3,"column":32},"end":{"line":3,"column":48}}}) : helper)))
     + "</td>\n  <td data-label=\"total\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"total") || (depth0 != null ? lookupProperty(depth0,"total") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"total","hash":{},"data":data,"loc":{"start":{"line":4,"column":25},"end":{"line":4,"column":34}}}) : helper)))
-    + "</td>\n  <td>\n    <div class=\"ui positive button details-btn\">Show Detail</div>\n  </td>\n</tr>";
+    + "</td>\n  <td>\n    <a href=\"/order-details?orderID="
+    + alias4(((helper = (helper = lookupProperty(helpers,"orderID") || (depth0 != null ? lookupProperty(depth0,"orderID") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"orderID","hash":{},"data":data,"loc":{"start":{"line":6,"column":36},"end":{"line":6,"column":47}}}) : helper)))
+    + "\">\n      <div class=\"ui positive button details-btn\">Show Detail</div>\n    </a>\n  </td>\n</tr>";
 },"useData":true});
 templates['customerAdminItem'] = template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {

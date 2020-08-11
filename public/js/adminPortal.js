@@ -16,6 +16,7 @@ function showCustomers() {
   sellersTable.style.display = 'none';
   ordersTable.style.display = 'none';
 }
+
 window.addEventListener('DOMContentLoaded', function () {
   showOrders();
   let ordersBtn = document.getElementsByClassName('orders-btn')[0];
@@ -39,6 +40,7 @@ window.addEventListener('DOMContentLoaded', function () {
           orderID: orderID
         }
       });
+
       // console.log(result);
       // window.location = `/order-details/${orderID}`;
     });
