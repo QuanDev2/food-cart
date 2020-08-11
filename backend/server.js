@@ -113,7 +113,6 @@ app.get('/manage-posts', (req, res) => {
     'ORDER BY seller.sellerName; ';
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
-
     res.render('managePosts', {
       allPosts: results
     });
@@ -174,9 +173,7 @@ app.get('/sell-dish', (req, res) => {
  */
 
 app.get('/order-details', async (req, res) => {
-  res.render('testpage');
   const orderID = parseInt(req.query.orderID);
-  console.log('req.query.orderID:', req.query.orderID);
   const orderDetailQuery =
     `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName ` +
     `FROM orderPost ` +
@@ -188,7 +185,9 @@ app.get('/order-details', async (req, res) => {
     `WHERE orderID = ${orderID};`;
   try {
     const orderDetailsResults = await mysql.pool.query(orderDetailQuery);
-    res.render('testpage');
+    res.render('orderDetails', {
+      orderDetails: orderDetailsResults
+    });
   } catch (err) {
     if (err) throw err;
   }

@@ -34,12 +34,12 @@ window.addEventListener('DOMContentLoaded', function () {
       // const result = await axios.post('/order-details', {
       //   orderID: orderID
       // });
-      const result = await axios.get('/order-details', {
+      axios.get('/order-details', {
         params: {
           orderID: orderID
         }
       });
-      console.log(result);
+      // console.log(result);
       // window.location = `/order-details/${orderID}`;
     });
   });

@@ -176,6 +176,11 @@ hr {
 #orders-table,
 #sellers-table,
 #customer-table {
-  height: 500px;
+  max-height: 500px;
   overflow-y: scroll;
+}
+
+/* Order Details Page */
+#order-details-container {
+  max-width: 60%;
 }
