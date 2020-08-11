@@ -15,54 +15,57 @@
     </a>
 
   </div>
-  <div class="ui bottom attached segment">
-    <table class="ui celled table" id="orders-table">
+
+  <div id="orders-table">
+    <table class="ui celled table">
       <thead>
         <tr>
           <th>Order ID</th>
-          <th>Dish Name</th>
-          <th>Quantity</th>
           <th>Customer Name</th>
-          <th>Subtotal</th>
+          <th>Total</th>
+          <th></th>
         </tr>
       </thead>
       </tbody>
 
-      {{#each orderAdminItems}}
-      {{> orderAdminItem}}
+      {{#each customerOrders}}
+      {{> customerOrder}}
       {{/each}}
     </table>
-    <table class="ui celled table" id="customers-table">
-      <thead>
-        <tr>
-          <th>Username</th>
-          <th>Name</th>
-
-          <th>Email</th>
-          <th>Phone Number</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each customerAdminItems}}
-        {{> customerAdminItem}}
-        {{/each}}
-      </tbody>
-    </table>
-
-    <table class="ui celled table" id="sellers-table">
-      <thead>
-        <tr>
-          <th>Username</th>
-          <th>Name</th>
-
-          <th>Email</th>
-          <th>Phone Number</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each sellerAdminItems}}
-        {{> sellerAdminItem}}
-        {{/each}}
-      </tbody>
-    </table>
   </div>
+
+
+  <table class="ui celled table" id="customers-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Name</th>
+
+        <th>Email</th>
+        <th>Phone Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each customerAdminItems}}
+      {{> customerAdminItem}}
+      {{/each}}
+    </tbody>
+  </table>
+
+  <table class="ui celled table" id="sellers-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Name</th>
+
+        <th>Email</th>
+        <th>Phone Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each sellerAdminItems}}
+      {{> sellerAdminItem}}
+      {{/each}}
+    </tbody>
+  </table>
+</div>

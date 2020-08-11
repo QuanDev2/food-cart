@@ -1,0 +1,18 @@
+<div class="form-container">
+  <table class="ui celled table" id="orders-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Dish Name</th>
+        <th>Quantity</th>
+        <th>Customer Name</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    </tbody>
+
+    {{#each orderDetails}}
+    {{> orderDetailsItem}}
+    {{/each}}
+  </table>
+</div>

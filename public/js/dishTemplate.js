@@ -1,5 +1,21 @@
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['customerOrder'] = template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "<tr>\n  <td data-label=\"order-id\">"
+    + alias4(((helper = (helper = lookupProperty(helpers,"orderID") || (depth0 != null ? lookupProperty(depth0,"orderID") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"orderID","hash":{},"data":data,"loc":{"start":{"line":2,"column":28},"end":{"line":2,"column":39}}}) : helper)))
+    + "</td>\n  <td data-label=\"customerName\">"
+    + alias4(((helper = (helper = lookupProperty(helpers,"customerName") || (depth0 != null ? lookupProperty(depth0,"customerName") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"customerName","hash":{},"data":data,"loc":{"start":{"line":3,"column":32},"end":{"line":3,"column":48}}}) : helper)))
+    + "</td>\n  <td data-label=\"total\">"
+    + alias4(((helper = (helper = lookupProperty(helpers,"total") || (depth0 != null ? lookupProperty(depth0,"total") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"total","hash":{},"data":data,"loc":{"start":{"line":4,"column":25},"end":{"line":4,"column":34}}}) : helper)))
+    + "</td>\n  <td>\n    <div class=\"ui positive button details-btn\">Show Detail</div>\n  </td>\n</tr>";
+},"useData":true});
 templates['customerAdminItem'] = template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -78,12 +94,14 @@ templates['orderItem'] = template({"compiler":[8,">= 4.3.0"],"main":function(con
 
   return "<div class=\"item order-item\" data-postID=\""
     + alias4(((helper = (helper = lookupProperty(helpers,"postID") || (depth0 != null ? lookupProperty(depth0,"postID") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"postID","hash":{},"data":data,"loc":{"start":{"line":1,"column":42},"end":{"line":1,"column":52}}}) : helper)))
+    + "\" data-price=\""
+    + alias4(((helper = (helper = lookupProperty(helpers,"price") || (depth0 != null ? lookupProperty(depth0,"price") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"price","hash":{},"data":data,"loc":{"start":{"line":1,"column":66},"end":{"line":1,"column":75}}}) : helper)))
     + "\">\n  <div class=\" ui smaller image\">\n    <img src="
     + alias4(((helper = (helper = lookupProperty(helpers,"imgUrl") || (depth0 != null ? lookupProperty(depth0,"imgUrl") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"imgUrl","hash":{},"data":data,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":23}}}) : helper)))
     + " />\n  </div>\n  <div class=\"content\">\n    <div class=\"header\">"
     + alias4(((helper = (helper = lookupProperty(helpers,"dishName") || (depth0 != null ? lookupProperty(depth0,"dishName") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"dishName","hash":{},"data":data,"loc":{"start":{"line":6,"column":24},"end":{"line":6,"column":36}}}) : helper)))
     + "</div>\n    <div class=\"meta\">\n      <span class=\"price\">$"
-    + alias4(((helper = (helper = lookupProperty(helpers,"price") || (depth0 != null ? lookupProperty(depth0,"price") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"price","hash":{},"data":data,"loc":{"start":{"line":8,"column":27},"end":{"line":8,"column":36}}}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"subtotal") || (depth0 != null ? lookupProperty(depth0,"subtotal") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"subtotal","hash":{},"data":data,"loc":{"start":{"line":8,"column":27},"end":{"line":8,"column":39}}}) : helper)))
     + "</span>\n      <span class=\"quantity\">Qty: "
     + alias4(((helper = (helper = lookupProperty(helpers,"quantity") || (depth0 != null ? lookupProperty(depth0,"quantity") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"quantity","hash":{},"data":data,"loc":{"start":{"line":9,"column":34},"end":{"line":9,"column":46}}}) : helper)))
     + "</span>\n    </div>\n  </div>\n  <i class=\"x icon\"></i>\n</div>";
