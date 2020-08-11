@@ -12,42 +12,54 @@ mysql.pool.query = util.promisify(mysql.pool.query);
 // base url for images
 const imgBaseUrl = 'https://food-cart-images.s3-us-west-2.amazonaws.com/';
 
-var allDishData = require('./data/postData');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-/**************************
- * set up storage engine
+/*************************************
+ * set up file upload storage engine
  */
-const storageEngine = multer.diskStorage({
-  destination: './public/assets/img/',
-  filename: function (req, file, callback) {
-    callback(
-      null,
-      file.fieldname + '-' + Date.now() + path.extname(file.originalname)
-    );
-  }
-});
+
+const upload = require('./file-upload');
+const singleUpload = upload.single('image');
+
+// const storageEngine = multer.diskStorage({
+//   destination: "./public/assets/img/",
+//   filename: function (req, file, callback) {
+//     callback(
+//       null,
+//       file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+//     );
+//   },
+// });
 
 /**************************
  * Init upload variable
  */
-const upload = multer({
-  storage: storageEngine
-}).single('image');
+// const upload = multer({
+//   storage: storageEngine,
+// }).single("image");
 
 // set up handlebars and view engine
 app.engine(
   'handlebars',
   exphbs({
-    defaultLayout: 'main'
+    defaultLayout: 'main',
   })
 );
+
+/***************************
+ * Set up handlebars engine
+ */
 app.set('view engine', 'handlebars');
 
+/****************************
+ * Set up database engine
+ */
 app.set('mysql', mysql);
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// serve static files from public/
 
+/******************************
+ * Serve static files
+ */
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../public/css')));
 app.use(express.static(path.join(__dirname, '../public/js')));
@@ -75,7 +87,7 @@ app.get('/', (req, res) => {
       res.render('homepage', {
         dishes: posts,
         allCustomers: customerInfo,
-        showSearchBox: true
+        showSearchBox: true,
       });
     });
   });
@@ -112,7 +124,7 @@ app.get('/manage-posts', (req, res) => {
     if (err) throw err;
 
     res.render('managePosts', {
-      allPosts: results
+      allPosts: results,
     });
   });
 });
@@ -142,7 +154,7 @@ app.get('/admin-portal', async (req, res) => {
     res.render('adminPortal', {
       orderAdminItems: orderResults,
       customerAdminItems: customerResults,
-      sellerAdminItems: sellerResults
+      sellerAdminItems: sellerResults,
     });
   } catch (err) {
     throw err;
@@ -163,7 +175,7 @@ app.get('/sell-dish', (req, res) => {
       if (err) throw err;
       res.render('sellDish', {
         allSellers: sellerNames,
-        allDishes: dishNames
+        allDishes: dishNames,
       });
     });
   });
@@ -178,7 +190,7 @@ app.post('/new-order', async (req, res) => {
   const orderList = req.body.orders;
 
   // sum up the total
-  orderList.forEach(element => {
+  orderList.forEach((element) => {
     orderTotal += parseFloat(element.subtotal);
   });
   const insertOrderQuery =
@@ -279,7 +291,7 @@ app.post('/manage-post-update', (req, res) => {
 
 app.post('/create-post', (req, res) => {
   // handle image upload
-  upload(req, res, async err => {
+  upload(req, res, async (err) => {
     if (err) {
       throw err;
     } else {
@@ -290,7 +302,7 @@ app.post('/create-post', (req, res) => {
         var newPost = {
           sellerID: sellerIDResults[0].sellerID,
           price: req.body.price,
-          image: req.file.filename
+          image: req.file.filename,
         };
         const insertPostResults = await mysql.pool.query(
           'INSERT INTO post SET ?',
@@ -315,3 +327,7 @@ app.post('/create-post', (req, res) => {
 app.listen(port, () => {
   console.log('server is listening on port ', port);
 });
+
+// amazon s3 credentials
+// Access Key ID: AKIA3XMIYB3H7K35T7PI
+// secret key: 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
