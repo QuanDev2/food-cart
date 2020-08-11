@@ -9,30 +9,15 @@ const port = process.env.PORT || 3000;
 
 const util = require('util');
 mysql.pool.query = util.promisify(mysql.pool.query);
-// base url for images
-const imgBaseUrl = 'https://food-cart-images.s3-us-west-2.amazonaws.com/';
 
-var allDishData = require('./data/postData');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-/**************************
- * set up storage engine
+/*************************************
+ * set up file upload storage engine
  */
-const storageEngine = multer.diskStorage({
-  destination: './public/assets/img/',
-  filename: function (req, file, callback) {
-    callback(
-      null,
-      file.fieldname + '-' + Date.now() + path.extname(file.originalname)
-    );
-  }
-});
 
-/**************************
- * Init upload variable
- */
-const upload = multer({
-  storage: storageEngine
-}).single('image');
+const upload = require('./file-upload').single('image');
 
 // set up handlebars and view engine
 app.engine(
@@ -41,17 +26,35 @@ app.engine(
     defaultLayout: 'main'
   })
 );
+
+/***************************
+ * Set up handlebars engine
+ */
 app.set('view engine', 'handlebars');
 
+/****************************
+ * Set up database engine
+ */
 app.set('mysql', mysql);
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// serve static files from public/
 
+/******************************
+ * Serve static files
+ */
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../public/css')));
 app.use(express.static(path.join(__dirname, '../public/js')));
 app.use(express.static(path.join(__dirname, '../public/assets/img')));
+
+/******************************
+ * Testing image upload api
+ */
+
+app.post('/api/image', (req, res) => {
+  upload(req, res, err => {
+    if (err) throw err;
+    return res.json({ imageUrl: req.file.location });
+  });
+});
 
 /***************************
  * Serve the home page
@@ -282,32 +285,31 @@ app.post('/create-post', (req, res) => {
   upload(req, res, async err => {
     if (err) {
       throw err;
-    } else {
-      try {
-        const sellerIDResults = await mysql.pool.query(
-          `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`
-        );
-        var newPost = {
-          sellerID: sellerIDResults[0].sellerID,
-          price: req.body.price,
-          image: req.file.filename
-        };
-        const insertPostResults = await mysql.pool.query(
-          'INSERT INTO post SET ?',
-          newPost
-        );
-        // const newPostID = await mysql.pool.query(
-        //   'SELECT postID FROM post ORDER BY postID DESC LIMIT 1;')[0].postID;
-        // const newPostID = postIDResult[0].postID;
-        const insertDishPostResults = await mysql.pool.query(
-          `INSERT INTO dishPost (dishID, postID)
+    }
+    try {
+      const sellerIDResults = await mysql.pool.query(
+        `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`
+      );
+      var newPost = {
+        sellerID: sellerIDResults[0].sellerID,
+        price: req.body.price,
+        image: req.file.location
+      };
+      const insertPostResults = await mysql.pool.query(
+        'INSERT INTO post SET ?',
+        newPost
+      );
+      // const newPostID = await mysql.pool.query(
+      //   'SELECT postID FROM post ORDER BY postID DESC LIMIT 1;')[0].postID;
+      // const newPostID = postIDResult[0].postID;
+      const insertDishPostResults = await mysql.pool.query(
+        `INSERT INTO dishPost (dishID, postID)
         VALUES
         ((SELECT dishID FROM dish WHERE dishName = '${req.body.dishName}'), (select postID from post order by postID desc limit 1));`
-        );
-        res.send('OK');
-      } catch (err) {
-        throw err;
-      }
+      );
+      res.send('OK');
+    } catch (err) {
+      throw err;
     }
   });
 });
