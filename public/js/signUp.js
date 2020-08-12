@@ -14,7 +14,17 @@ const handleSubmit = async event => {
   let email = document.getElementById('email-input').value;
   let phone = document.getElementById('phone-input').value;
   let accountCustomer = document.getElementById('account-customer');
-  let accountType = accountCustomer.checked ? 'customer' : 'seller';
+  let accountSeller = document.getElementById('account-seller');
+  let accountDriver = document.getElementById('account-driver');
+  let accountType = '';
+  document
+    .getElementsByClassName('user-type-btn')[0]
+    .querySelectorAll('input')
+    .forEach(element => {
+      if (element.checked === true) {
+        accountType = element.value;
+      }
+    });
   try {
     const res = await axios.post('/sign-up', {
       fullName: fullName,
