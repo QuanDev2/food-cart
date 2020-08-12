@@ -85,10 +85,10 @@ placeOrderBtn.addEventListener('click', async event => {
 // get info of all posts
 let numPosts = document.getElementsByClassName('dish').length;
 
-function insertOrderItem(dishName, price, quantity, imgUrl, postID) {
+function insertOrderItem(dishName, subtotal, quantity, imgUrl, postID) {
   var orderItemContext = {
     dishName: dishName,
-    price: price,
+    subtotal: subtotal,
     quantity: quantity,
     imgUrl: imgUrl,
     postID: postID

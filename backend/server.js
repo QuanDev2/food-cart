@@ -113,7 +113,6 @@ app.get('/manage-posts', (req, res) => {
     'ORDER BY seller.sellerName; ';
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
-
     res.render('managePosts', {
       allPosts: results
     });
@@ -126,24 +125,21 @@ app.get('/manage-posts', (req, res) => {
 
 app.get('/admin-portal', async (req, res) => {
   const orderQuery =
-    `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName, orderPost.subtotal ` +
-    `FROM orderPost ` +
-    `JOIN customerOrder USING (orderID) ` +
+    `SELECT customerOrder.orderID, customer.customerName, customerOrder.total ` +
+    `FROM customerOrder ` +
     `JOIN customer USING (customerID) ` +
-    `JOIN post USING (postID) ` +
-    `JOIN dishPost USING (postID) ` +
-    `JOIN dish USING (dishID) ` +
-    `ORDER BY orderID;`;
+    `ORDER BY customerOrder.orderID`;
 
   const customerQuery = `SELECT username, customerName, email, phoneNumber FROM customer ORDER BY customerID`;
 
   const sellerQuery = `SELECT username, sellerName, email, phoneNumber FROM seller ORDER BY sellerID`;
   try {
     const orderResults = await mysql.pool.query(orderQuery);
+
     const customerResults = await mysql.pool.query(customerQuery);
     const sellerResults = await mysql.pool.query(sellerQuery);
     res.render('adminPortal', {
-      orderAdminItems: orderResults,
+      customerOrders: orderResults,
       customerAdminItems: customerResults,
       sellerAdminItems: sellerResults
     });
@@ -171,6 +167,61 @@ app.get('/sell-dish', (req, res) => {
     });
   });
 });
+
+/**************************************
+ * Serve order details route
+ */
+
+app.get('/order-details', async (req, res) => {
+  const orderID = parseInt(req.query.orderID);
+  const orderDetailQuery =
+    `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName, post.price ` +
+    `FROM orderPost ` +
+    `JOIN customerOrder USING (orderID) ` +
+    `JOIN customer USING (customerID) ` +
+    `JOIN post USING (postID) ` +
+    `JOIN dishPost USING (postID) ` +
+    `JOIN dish USING (dishID) ` +
+    `WHERE orderID = ${orderID};`;
+
+  try {
+    const orderDetailsResults = await mysql.pool.query(orderDetailQuery);
+
+    // loop thru result array and calculate subtotal
+    orderDetailsResults.forEach(element => {
+      const subtotal = element.price * element.quantity;
+      element.subtotal = subtotal;
+    });
+
+    res.render('orderDetails', {
+      orderDetails: orderDetailsResults
+    });
+  } catch (err) {
+    if (err) throw err;
+  }
+});
+// app.post('/order-details', async (req, res) => {
+//   const orderID = parseInt(req.body.orderID);
+
+//   const orderDetailQuery =
+//     `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName ` +
+//     `FROM orderPost ` +
+//     `JOIN customerOrder USING (orderID) ` +
+//     `JOIN customer USING (customerID) ` +
+//     `JOIN post USING (postID) ` +
+//     `JOIN dishPost USING (postID) ` +
+//     `JOIN dish USING (dishID) ` +
+//     `WHERE orderID = ${orderID};`;
+//   try {
+//     const orderDetailsResults = await mysql.pool.query(orderDetailQuery);
+//     console.log(orderDetailsResults);
+//     res.render('orderDetails', {
+//       orderDetails: orderDetailsResults
+//     });
+//   } catch (err) {
+//     if (err) throw err;
+//   }
+// });
 
 /********************************
  * Handle new post from home page
@@ -200,10 +251,10 @@ app.post('/new-order', async (req, res) => {
   for (let i = 0; i < orderList.length; i++) {
     const postID = parseInt(orderList[i].postID);
     const quantity = parseInt(orderList[i].quantity);
-    const subtotal = parseFloat(orderList[i].subtotal);
+    // const subtotal = parseFloat(orderList[i].subtotal);
     const insertOrderPostQuery =
-      `INSERT INTO orderPost (postID, orderID, quantity, subtotal) VALUES(` +
-      `${postID} ,(${latestOrderIDQuery}), ${quantity}, ${subtotal})`;
+      `INSERT INTO orderPost (postID, orderID, quantity) VALUES(` +
+      `${postID} ,(${latestOrderIDQuery}), ${quantity})`;
     try {
       await mysql.pool.query(insertOrderPostQuery);
     } catch (err) {

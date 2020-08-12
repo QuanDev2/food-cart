@@ -1,4 +1,4 @@
-@import "sellDish.css";
+@import 'sellDish.css';
 
 /* Nav bar */
 nav {
@@ -46,7 +46,7 @@ nav {
 
 .seller-name::before,
 .seller-name::after {
-  content: "-";
+  content: '-';
   font-weight: 600;
   font-size: 20px;
   margin: 0 0.5em;
@@ -69,9 +69,10 @@ nav {
 
 /* order sidebar */
 
-.smaller.image {
-  width: 60px;
-  height: 60px;
+.smaller.image img {
+  width: 60px !important;
+  height: 60px !important;
+  object-fit: cover !important;
 }
 
 .x.icon {
@@ -165,9 +166,21 @@ hr {
 /* Admin Portal page */
 
 #admin-portal-container {
-  max-width: 65%;
+  max-width: 55%;
 }
 
 #admin-portal-container h2 {
   margin-bottom: 2em;
+}
+
+#orders-table,
+#sellers-table,
+#customer-table {
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+/* Order Details Page */
+#order-details-container {
+  max-width: 60%;
 }
