@@ -35,37 +35,41 @@
   </div>
 
 
-  <table class="ui celled table" id="customers-table">
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Name</th>
+  <div id="customers-table">
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Name</th>
 
-        <th>Email</th>
-        <th>Phone Number</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each customerAdminItems}}
-      {{> customerAdminItem}}
-      {{/each}}
-    </tbody>
-  </table>
+          <th>Email</th>
+          <th>Phone Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each customerAdminItems}}
+        {{> customerAdminItem}}
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 
-  <table class="ui celled table" id="sellers-table">
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Name</th>
+  <div id="sellers-table">
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Name</th>
 
-        <th>Email</th>
-        <th>Phone Number</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each sellerAdminItems}}
-      {{> sellerAdminItem}}
-      {{/each}}
-    </tbody>
-  </table>
+          <th>Email</th>
+          <th>Phone Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each sellerAdminItems}}
+        {{> sellerAdminItem}}
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 </div>

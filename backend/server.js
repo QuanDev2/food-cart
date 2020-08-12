@@ -175,7 +175,7 @@ app.get('/sell-dish', (req, res) => {
 app.get('/order-details', async (req, res) => {
   const orderID = parseInt(req.query.orderID);
   const orderDetailQuery =
-    `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName ` +
+    `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName, post.price ` +
     `FROM orderPost ` +
     `JOIN customerOrder USING (orderID) ` +
     `JOIN customer USING (customerID) ` +
@@ -183,8 +183,16 @@ app.get('/order-details', async (req, res) => {
     `JOIN dishPost USING (postID) ` +
     `JOIN dish USING (dishID) ` +
     `WHERE orderID = ${orderID};`;
+
   try {
     const orderDetailsResults = await mysql.pool.query(orderDetailQuery);
+
+    // loop thru result array and calculate subtotal
+    orderDetailsResults.forEach(element => {
+      const subtotal = element.price * element.quantity;
+      element.subtotal = subtotal;
+    });
+
     res.render('orderDetails', {
       orderDetails: orderDetailsResults
     });
