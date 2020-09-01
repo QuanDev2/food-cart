@@ -13,26 +13,34 @@
     <a class="item customers-btn">
       Customers
     </a>
+    <a class="item drivers-btn">
+      Drivers
+    </a>
 
   </div>
-  <div class="ui bottom attached segment">
-    <table class="ui celled table" id="orders-table">
+
+  <div id="orders-table">
+    <table class="ui celled table">
       <thead>
         <tr>
           <th>Order ID</th>
-          <th>Dish Name</th>
-          <th>Quantity</th>
           <th>Customer Name</th>
-          <th>Subtotal</th>
+          <th>Driver Name</th>
+          <th>Total</th>
+          <th></th>
         </tr>
       </thead>
       </tbody>
 
-      {{#each orderAdminItems}}
-      {{> orderAdminItem}}
+      {{#each customerOrders}}
+      {{> customerOrder}}
       {{/each}}
     </table>
-    <table class="ui celled table" id="customers-table">
+  </div>
+
+
+  <div id="customers-table">
+    <table class="ui celled table">
       <thead>
         <tr>
           <th>Username</th>
@@ -48,8 +56,10 @@
         {{/each}}
       </tbody>
     </table>
+  </div>
 
-    <table class="ui celled table" id="sellers-table">
+  <div id="sellers-table">
+    <table class="ui celled table">
       <thead>
         <tr>
           <th>Username</th>
@@ -66,3 +76,23 @@
       </tbody>
     </table>
   </div>
+
+  <div id="drivers-table">
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Name</th>
+
+          <th>Email</th>
+          <th>Phone Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each driverAdminItems}}
+        {{> driverAdminItem}}
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>

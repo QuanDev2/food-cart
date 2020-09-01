@@ -58,9 +58,11 @@ placeOrderBtn.addEventListener('click', async event => {
     });
   });
 
-  // grab customer name
-  // console.log(document.getElementById('customerName').innerText);
-  // console.log(orderList);
+  // read delivery method
+  const deliveryMethod = document.getElementById('delivery').checked
+    ? 'delivery'
+    : 'pickup';
+
   const customerName = document.getElementById('customerName').innerText;
   if (customerName == 'Customer Name') {
     alert('Please choose a customer name');
@@ -68,12 +70,11 @@ placeOrderBtn.addEventListener('click', async event => {
   }
   // send to the server
   try {
-    console.log(orderList);
     const res = await axios.post('/new-order', {
       orders: orderList,
-      customerName: customerName
+      customerName: customerName,
+      deliveryMethod: deliveryMethod
     });
-    // console.log(res);
   } catch (err) {
     throw err;
   }
@@ -85,10 +86,10 @@ placeOrderBtn.addEventListener('click', async event => {
 // get info of all posts
 let numPosts = document.getElementsByClassName('dish').length;
 
-function insertOrderItem(dishName, price, quantity, imgUrl, postID) {
+function insertOrderItem(dishName, subtotal, quantity, imgUrl, postID) {
   var orderItemContext = {
     dishName: dishName,
-    price: price,
+    subtotal: subtotal,
     quantity: quantity,
     imgUrl: imgUrl,
     postID: postID
@@ -251,7 +252,6 @@ window.addEventListener('DOMContentLoaded', function () {
       }
       let lineTotal = dishPrice * qty;
       total += lineTotal;
-      // console.log(dishElement);
       const postID = dishElement.dataset.postid;
       insertOrderItem(dishName, lineTotal, qty, imgUrl, postID);
       resetQuantity();

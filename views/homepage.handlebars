@@ -22,6 +22,16 @@
           {{/each}}
         </div>
       </div>
+      <div class="ui radio delivery-method">
+        <div class="delivery-item">
+          <input type="radio" name="deliveryType" checked="checked" id="delivery" value="delivery" />
+          <label for="delivery">Free Delivery</label>
+        </div>
+        <div class="delivery-item">
+          <input type="radio" name="deliveryType" id="pickup" value="pickup" />
+          <label for="pickup">I'll pick it up</label>
+        </div>
+      </div>
       <h3 id="order-total">Order Total: $<span id="total">0</span></h3>
 
       <button id="place-order-btn" class="ui button blue place-order-btn" type="button">Place Order</button>
@@ -35,10 +45,13 @@
       <li>
         This is the home page, where customers will browse for the dish
         the want, then add the quantity and "add to cart" using the button below the photos.
+        User can use the search bar to look for dishes.
+        Please also choose a customer name and delivery method.
+        If users choose "Free Delivery", a random driver will be assigned to the order.
       </li>
       <li>
         After that, customer can click "Place Order" to make the purchase.
-        This will add new entries to the "Order" table in the database
+        This will INSERT new entries to the "customerOrder" table in the database
       </li>
       <li>
         To perform INSERT into the "Post" table, use the "Sell your dish"
@@ -49,16 +62,17 @@
         dish" page, click on "Create a new dish"
       </li>
       <li>
-        To perform INSERT into the "Customer" or "Seller" table, use the
-        "Sign Up" button
+        To perform INSERT into the "customer", "seller", or "driver" table, use the "Sign Up" button
       </li>
       <li>
         To perform UPDATE and DELETE on the "Post" table, click on the
-        "Manage Posts" button. Only sellers can manage their posts.
-        Customers cannot modify their orders
+        "Manage Posts" button.
       </li>
       <li>
-        To view "Order", "Seller" and "Customer" tables, use the "Admin Portal" button.
+        To view "Order", "Seller", "Customer", and "Driver" tables, use the "Admin Portal" button.
+      </li>
+      <li>
+        To view the details of an order, click "Show Details" button
       </li>
     </ul>
   </div>

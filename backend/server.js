@@ -9,30 +9,15 @@ const port = process.env.PORT || 3000;
 
 const util = require('util');
 mysql.pool.query = util.promisify(mysql.pool.query);
-// base url for images
-const imgBaseUrl = 'https://food-cart-images.s3-us-west-2.amazonaws.com/';
 
-var allDishData = require('./data/postData');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-/**************************
- * set up storage engine
+/*************************************
+ * set up file upload storage engine
  */
-const storageEngine = multer.diskStorage({
-  destination: './public/assets/img/',
-  filename: function (req, file, callback) {
-    callback(
-      null,
-      file.fieldname + '-' + Date.now() + path.extname(file.originalname)
-    );
-  }
-});
 
-/**************************
- * Init upload variable
- */
-const upload = multer({
-  storage: storageEngine
-}).single('image');
+const upload = require('./file-upload').single('image');
 
 // set up handlebars and view engine
 app.engine(
@@ -41,17 +26,35 @@ app.engine(
     defaultLayout: 'main'
   })
 );
+
+/***************************
+ * Set up handlebars engine
+ */
 app.set('view engine', 'handlebars');
 
+/****************************
+ * Set up database engine
+ */
 app.set('mysql', mysql);
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// serve static files from public/
 
+/******************************
+ * Serve static files
+ */
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../public/css')));
 app.use(express.static(path.join(__dirname, '../public/js')));
 app.use(express.static(path.join(__dirname, '../public/assets/img')));
+
+/******************************
+ * Testing image upload api
+ */
+
+app.post('/api/image', (req, res) => {
+  upload(req, res, err => {
+    if (err) throw err;
+    return res.json({ imageUrl: req.file.location });
+  });
+});
 
 /***************************
  * Serve the home page
@@ -110,7 +113,6 @@ app.get('/manage-posts', (req, res) => {
     'ORDER BY seller.sellerName; ';
   mysql.pool.query(query, (err, results) => {
     if (err) throw err;
-
     res.render('managePosts', {
       allPosts: results
     });
@@ -123,26 +125,32 @@ app.get('/manage-posts', (req, res) => {
 
 app.get('/admin-portal', async (req, res) => {
   const orderQuery =
-    `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName, orderPost.subtotal ` +
-    `FROM orderPost ` +
-    `JOIN customerOrder USING (orderID) ` +
+    `SELECT customerOrder.orderID, customer.customerName, customerOrder.total, driver.driverName ` +
+    `FROM customerOrder ` +
     `JOIN customer USING (customerID) ` +
-    `JOIN post USING (postID) ` +
-    `JOIN dishPost USING (postID) ` +
-    `JOIN dish USING (dishID) ` +
-    `ORDER BY orderID;`;
+    `LEFT JOIN driver USING (driverID) ` +
+    `ORDER BY customerOrder.orderID`;
 
   const customerQuery = `SELECT username, customerName, email, phoneNumber FROM customer ORDER BY customerID`;
-
   const sellerQuery = `SELECT username, sellerName, email, phoneNumber FROM seller ORDER BY sellerID`;
+  const driverQuery = `SELECT username, driverName, email, phoneNumber FROM driver ORDER BY driverID`;
+
   try {
-    const orderResults = await mysql.pool.query(orderQuery);
+    let orderResults = await mysql.pool.query(orderQuery);
     const customerResults = await mysql.pool.query(customerQuery);
     const sellerResults = await mysql.pool.query(sellerQuery);
+    const driverResults = await mysql.pool.query(driverQuery);
+
+    // process blank driver name
+    orderResults.forEach(element => {
+      if (element.driverName === null) element.driverName = '[Pick Up]';
+    });
+
     res.render('adminPortal', {
-      orderAdminItems: orderResults,
+      customerOrders: orderResults,
       customerAdminItems: customerResults,
-      sellerAdminItems: sellerResults
+      sellerAdminItems: sellerResults,
+      driverAdminItems: driverResults
     });
   } catch (err) {
     throw err;
@@ -169,21 +177,65 @@ app.get('/sell-dish', (req, res) => {
   });
 });
 
+/**************************************
+ * Serve order details route
+ */
+
+app.get('/order-details', async (req, res) => {
+  const orderID = parseInt(req.query.orderID);
+  const orderDetailQuery =
+    `SELECT customerOrder.orderID, dish.dishName, orderPost.quantity, customer.customerName, post.price ` +
+    `FROM orderPost ` +
+    `JOIN customerOrder USING (orderID) ` +
+    `JOIN customer USING (customerID) ` +
+    `JOIN post USING (postID) ` +
+    `JOIN dishPost USING (postID) ` +
+    `JOIN dish USING (dishID) ` +
+    `WHERE orderID = ${orderID};`;
+
+  try {
+    const orderDetailsResults = await mysql.pool.query(orderDetailQuery);
+
+    // loop thru result array and calculate subtotal
+    orderDetailsResults.forEach(element => {
+      const subtotal = element.price * element.quantity;
+      element.subtotal = subtotal;
+    });
+
+    res.render('orderDetails', {
+      orderDetails: orderDetailsResults
+    });
+  } catch (err) {
+    if (err) throw err;
+  }
+});
+
 /********************************
  * Handle new post from home page
  */
 
 app.post('/new-order', async (req, res) => {
   let orderTotal = 0;
+  let driverID = null;
   const orderList = req.body.orders;
 
   // sum up the total
   orderList.forEach(element => {
     orderTotal += parseFloat(element.subtotal);
   });
+
+  // process driver. If delivery, pick a random driver
+  if (req.body.deliveryMethod === 'delivery') {
+    const allDrivers = await mysql.pool.query(
+      'SELECT driverID FROM driver ORDER BY driverID'
+    );
+    driverID =
+      allDrivers[Math.floor(Math.random() * allDrivers.length)].driverID;
+  }
+
   const insertOrderQuery =
-    `INSERT INTO customerOrder (customerID, total) ` +
-    `VALUES ((SELECT customerID FROM customer WHERE customerName = '${req.body.customerName}'), ${orderTotal})`;
+    `INSERT INTO customerOrder (customerID, total, driverID) ` +
+    `VALUES ((SELECT customerID FROM customer WHERE customerName = '${req.body.customerName}'), ${orderTotal}, ${driverID})`;
   try {
     const result = await mysql.pool.query(insertOrderQuery);
   } catch (err) {
@@ -197,10 +249,10 @@ app.post('/new-order', async (req, res) => {
   for (let i = 0; i < orderList.length; i++) {
     const postID = parseInt(orderList[i].postID);
     const quantity = parseInt(orderList[i].quantity);
-    const subtotal = parseFloat(orderList[i].subtotal);
+    // const subtotal = parseFloat(orderList[i].subtotal);
     const insertOrderPostQuery =
-      `INSERT INTO orderPost (postID, orderID, quantity, subtotal) VALUES(` +
-      `${postID} ,(${latestOrderIDQuery}), ${quantity}, ${subtotal})`;
+      `INSERT INTO orderPost (postID, orderID, quantity) VALUES(` +
+      `${postID} ,(${latestOrderIDQuery}), ${quantity})`;
     try {
       await mysql.pool.query(insertOrderPostQuery);
     } catch (err) {
@@ -282,32 +334,31 @@ app.post('/create-post', (req, res) => {
   upload(req, res, async err => {
     if (err) {
       throw err;
-    } else {
-      try {
-        const sellerIDResults = await mysql.pool.query(
-          `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`
-        );
-        var newPost = {
-          sellerID: sellerIDResults[0].sellerID,
-          price: req.body.price,
-          image: req.file.filename
-        };
-        const insertPostResults = await mysql.pool.query(
-          'INSERT INTO post SET ?',
-          newPost
-        );
-        // const newPostID = await mysql.pool.query(
-        //   'SELECT postID FROM post ORDER BY postID DESC LIMIT 1;')[0].postID;
-        // const newPostID = postIDResult[0].postID;
-        const insertDishPostResults = await mysql.pool.query(
-          `INSERT INTO dishPost (dishID, postID)
+    }
+    try {
+      const sellerIDResults = await mysql.pool.query(
+        `SELECT sellerID FROM seller WHERE sellerName = '${req.body.sellerName}'`
+      );
+      var newPost = {
+        sellerID: sellerIDResults[0].sellerID,
+        price: req.body.price,
+        image: req.file.location
+      };
+      const insertPostResults = await mysql.pool.query(
+        'INSERT INTO post SET ?',
+        newPost
+      );
+      // const newPostID = await mysql.pool.query(
+      //   'SELECT postID FROM post ORDER BY postID DESC LIMIT 1;')[0].postID;
+      // const newPostID = postIDResult[0].postID;
+      const insertDishPostResults = await mysql.pool.query(
+        `INSERT INTO dishPost (dishID, postID)
         VALUES
         ((SELECT dishID FROM dish WHERE dishName = '${req.body.dishName}'), (select postID from post order by postID desc limit 1));`
-        );
-        res.send('OK');
-      } catch (err) {
-        throw err;
-      }
+      );
+      res.send('OK');
+    } catch (err) {
+      throw err;
     }
   });
 });

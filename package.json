@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon backend/server.js",
-    "build": "handlebars views/partials/customerAdminItem.handlebars views/partials/sellerAdminItem.handlebars views/partials/customerMenu.handlebars views/partials/managePostDish.handlebars views/partials/orderItem.handlebars views/partials/dish.handlebars views/partials/sellerMenu.handlebars views/partials/dishMenu.handlebars -f public/js/dishTemplate.js",
+    "build": "handlebars views/partials/customerOrder.handlebars views/partials/customerAdminItem.handlebars views/partials/sellerAdminItem.handlebars views/partials/customerMenu.handlebars views/partials/managePostDish.handlebars views/partials/orderItem.handlebars views/partials/dish.handlebars views/partials/sellerMenu.handlebars views/partials/dishMenu.handlebars -f public/js/dishTemplate.js",
     "prestart": "npm run build"
   },
   "repository": {
@@ -20,12 +20,14 @@
   },
   "homepage": "https://github.com/QuanDev2/food-cart#readme",
   "dependencies": {
+    "aws-sdk": "^2.730.0",
     "axios": "^0.18.1",
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "handlebars": "^4.7.6",
     "heroku": "^7.42.6",
     "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.4"
   }
