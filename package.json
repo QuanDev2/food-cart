@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/QuanDev2/food-cart#readme",
   "dependencies": {
-    "aws-sdk": "^2.730.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.18.1",
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
